@@ -1,18 +1,6 @@
-# create-svelte
+# word-trail
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+This app is currently designed to deploy to vercel.
 
 ## Developing
 
@@ -27,12 +15,10 @@ npm run dev -- --open
 
 ## Building
 
-To create a production version of your app:
+All commands should be run from root folder of repo (the folder containing this README).
 
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Deploy to vercel, using vercel docs and SvelteKit template. This will create a vercel project.
+Link this development folder to vercel: `vercel  link`
+Create a vercel postgres db, using vercel docs, and connect to created vercel project.
+Pull vercel environment variables: `vercel env pull .env.development.local`
+Verify creating a table works: Navigate to `/api/create-pets-table` in the browser.
