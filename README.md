@@ -1,21 +1,28 @@
 # word-trail
 
-This app is currently designed to deploy to vercel.
+This app currently deploys to Vercel. This has implications for how to install and build the application.
+
+## Installing
+
+The following steps are tested only on Linux (WSL2 - Ubuntu 20.04).
+
+Before beginning, ensure you are using Node 18 (for Vercel): if using nvm, run `nvm use 18 `.
+Then install dependencies with `npm install` (or `pnpm install` or `yarn`).
+
+If you would like to run playwright tests,
+
+1. Install playwright browsers with `npx playwright install`.
+2. Install playwright dependencies: ` sudo npx playwright install-deps `. If this command does not work, install the packages listed when you run `npm run test`.
+
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Start the server: `npm run dev``
 
-```bash
-npm run dev
+Run tests: `npm run test`
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
 
 ## Building
-
-All commands should be run from root folder of repo (the folder containing this README).
 
 Deploy to vercel, using vercel docs and SvelteKit template. This will create a vercel project.
 Link this development folder to vercel: `vercel  link`
