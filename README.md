@@ -12,15 +12,13 @@ Then install dependencies with `npm install` (or `pnpm install` or `yarn`).
 If you would like to run playwright tests,
 
 1. Install playwright browsers with `npx playwright install`.
-2. Install playwright dependencies: ` sudo npx playwright install-deps `. If this command does not work, install the packages listed when you run `npm run test`.
-
+2. Install playwright dependencies: `sudo npx playwright install-deps`. If this command does not work, install the packages listed when you run `npm run test`.
 
 ## Developing
 
 Start the server: `npm run dev``
 
 Run tests: `npm run test`
-
 
 ## Building
 

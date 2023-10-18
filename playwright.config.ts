@@ -1,4 +1,4 @@
-import type { PlaywrightTestConfig} from '@playwright/test';
+import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
 
 const config: PlaywrightTestConfig = {
@@ -9,11 +9,11 @@ const config: PlaywrightTestConfig = {
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	projects: [
-	  /* Test against desktop firefox browser only */
-	  {
-		name: 'firefox',
-		use: { ...devices['Desktop Firefox'] },
-	  },
+		/* Test against desktop firefox browser only */
+		{
+			name: 'firefox',
+			use: { ...devices['Desktop Firefox'] }
+		}
 	]
 };
 

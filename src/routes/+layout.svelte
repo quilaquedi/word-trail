@@ -1,14 +1,13 @@
 <script>
-	import "../app.postcss";
-	import Menu from "./Menu.svelte";
-    import './styles.css';
+	import '../app.postcss';
+	import Menu from './Menu.svelte';
+	import './styles.css';
 </script>
 
 <div class="app">
-	
 	<main>
 		<Menu>
-			<slot></slot>
+			<slot />
 		</Menu>
 	</main>
 </div>
@@ -30,5 +29,4 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-
 </style>
