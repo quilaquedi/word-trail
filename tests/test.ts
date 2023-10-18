@@ -22,17 +22,27 @@ test('if text not specified, rerouted to tutorial page', async ({ page }) => {
 	await expect(page).toHaveURL('/texts/'  + tutorial_name);
 });
 
-// Wireframe Tests
+// Test Components are visible
 
-//
-// test('text page displays required components', async ({ page }) => {
-// 	await page.goto('/texts/der-sandmann');
-// 	// Menu button is visible
-// 	await expect(page.getByRole("button", { name: "Menu"})).toBeVisible();
-// 	// Text pane is visible
-// 	await expect(page.getByRole("grid", { name: "Text"})).toBeVisible();
-// 	// Text title is visible
-// 	await expect(page.getByRole("heading", { name: "Der Sandmann"})).toBeVisible();
-// 	// Bookmark button is visible
-// 	await expect(page.getByRole("button", { name: "Bookmark"})).toBeVisible();
-// });
+
+test('text page displays required components', async ({ page }) => {
+	await page.goto('/texts/der-sandmann');
+	// Page has correct title
+	await expect(page).toHaveTitle("Der Sandmann | WordTrail");
+	// Menu button is visible
+	await expect(page.getByLabel("Menu")).toBeInViewport(); //Tests as hidden
+
+	// Text pane is visible
+	await expect(page.getByLabel("Text Pane")).toBeVisible();
+	// Text title is visible
+	await expect(page.getByRole("heading", { name: "Der Sandmann"})).toBeVisible();
+	// Bookmark button is visible
+	await expect(page.getByRole("button", { name: "Bookmark"})).toBeVisible();
+
+	// Context panes are visible
+	await expect(page.getByLabel("Same Word Pane")).toBeVisible();
+	await expect(page.getByLabel("Similar Spellings Pane")).toBeVisible();
+	await expect(page.getByLabel("Similar Meanings Pane")).toBeVisible();
+	// Lookup button is visible
+	await expect(page.getByRole("button", { name: "Lookup"})).toBeVisible();
+});

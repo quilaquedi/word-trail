@@ -1,26 +1,43 @@
+
 <svelte:head>
-	<title>Texts</title>
-	<meta name="description" content="About this app" />
+	<title>Der Sandmann | WordTrail</title>
 </svelte:head>
 
-<div class="text-column">
-	<h1>About this app</h1>
+<button class="btn no-animation">Lookup</button>
 
-	<p>
-		This is a <a href="https://kit.svelte.dev">SvelteKit</a> app. You can make your own by typing the
-		following into your command line and following the prompts:
-	</p>
+<div class="grid grid-cols-2 grid-rows-3 grid-flow-col">
+	<div class="row-span-3">
+		<h1>Der Sandmann</h1>
+		<form aria-label="Text Pane">
+			These are some words.
+		</form>
+		<button class="btn no-animation">Bookmark</button>
+	</div>
+	{#each ["Same Word", "Similar Spellings", "Similar Meanings"] as category}
+		
+	<div class="...">
 
-	<pre>npm create svelte@latest</pre>
+		<div class="overflow-x-auto overflow-y-auto">
+	
+		  <div aria-label={category + " Pane"} class="overflow-x-auto overflow-y-auto">
+			  <table class="table table-pin-rows">
+				<!-- head -->
+				<thead>
+				  <tr><th>{category} Contexts</th></tr>
+				</thead>
+				<tbody>
+				  <!-- row 1 -->
+				  <tr class="hover"><td>/param.1</td></tr>
+				  <!-- row 2 -->
+				  <tr class="hover"><td>/param.2</td></tr>
+				  <!-- row 3 -->
+				  <tr class="hover"><td>/param.3</td></tr>
+				</tbody>
+			  </table>
+			</div>
+		</div>
 
-	<p>
-		The page you're looking at is purely static HTML, with no client-side interactivity needed.
-		Because of that, we don't need to load any JavaScript. Try viewing the page's source, or opening
-		the devtools network panel and reloading.
-	</p>
-
-	<p>
-		The <a href="/sverdle">Sverdle</a> page illustrates SvelteKit's data loading and form handling. Try
-		using it with JavaScript disabled!
-	</p>
+	</div>
+	{/each}
 </div>
+  
