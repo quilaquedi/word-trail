@@ -28,12 +28,12 @@ test('text page displays required components', async ({ page }) => {
 	// Page has correct title
 	await expect(page).toHaveTitle('Der Sandmann | WordTrail');
 	// Menu button is visible
-	await expect(page.getByLabel('Menu')).toBeInViewport(); //Tests as hidden
+	await expect(page.getByLabel('open menu')).toBeVisible(); //Tests as hidden
 
 	// Text pane is visible
 	await expect(page.getByLabel('Text Pane')).toBeVisible();
 	// Text title is visible
-	await expect(page.getByRole('heading', { name: 'Der Sandmann' })).toBeVisible();
+	await expect(page.getByLabel('Text Title')).toBeVisible();
 	// Bookmark button is visible
 	await expect(page.getByRole('button', { name: 'Bookmark' })).toBeVisible();
 
@@ -47,7 +47,24 @@ test('text page displays required components', async ({ page }) => {
 
 test('menu displays required components', async ({ page }) => {
 	await page.goto('/');
+	await page.getByLabel('open menu').click();
+
 	// Menu shows app name
+	await expect(page.getByLabel('App Name')).toBeVisible();
 	// Menu shows languages
+	await expect(page.getByText('Deutsch', { exact: true })).toBeVisible();
+	await expect(page.getByText('English', { exact: true })).toBeVisible();
 	// Menu shows texts
+	await expect(page.getByRole('link', { name: 'Der Sandmann' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Tutorial' })).toBeVisible();
+});
+
+test('wider context displays required components', async ({ page }) => {
+	await page.goto('/');
+	await page.getByRole('button', { name: 'context' }).first().click();
+
+	// Wider Context shows wider context text
+	await expect(page.getByText('wider context')).toBeVisible();
+	// Wider Context shows name of referenced text
+	await expect(page.getByLabel('Wider Context Title')).toBeVisible();
 });

@@ -5,17 +5,29 @@
 <div class="drawer">
 	<input id="menu-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content">
-		<label for="menu-drawer" class="btn btn-primary drawer-button">Menu</label>
+		<label for="menu-drawer" aria-label="open menu" class="btn btn-primary drawer-button"
+			>Menu</label
+		>
 		<slot />
 	</div>
 	<div class="drawer-side">
-		<label for="menu-drawer" aria-label="close sidebar" class="drawer-overlay" />
-		<div class="menu">
-			<header></header>
-			<ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
-				<li><a href={tutorial_route}>Tutorial</a></li>
-				<li><a href="/texts/der-sandmann">Der Sandmann</a></li>
-			</ul>
+		<label for="menu-drawer" aria-label="close menu" class="drawer-overlay" />
+		<div class="menu p-4 w-80 min-h-full bg-base-200">
+			<header aria-label="app name">WordTrail</header>
+			<li>
+				<details open>
+					<summary>Deutsch</summary>
+					<ul>
+						<li><a href="/texts/der-sandmann">Der Sandmann</a></li>
+					</ul>
+				</details>
+				<details open>
+					<summary>English</summary>
+					<ul>
+						<li><a href={tutorial_route}>Tutorial</a></li>
+					</ul>
+				</details>
+			</li>
 		</div>
 	</div>
 </div>
