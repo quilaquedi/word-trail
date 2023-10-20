@@ -4,6 +4,6 @@
 	export let wordPosition;
 </script>
 
-{text}
-{wordId}
-{wordPosition}
+...{text.slice(0, wordPosition[0])}
+<b class="italic">{text.slice(...wordPosition)}</b>
+{text.slice(wordPosition[1])}

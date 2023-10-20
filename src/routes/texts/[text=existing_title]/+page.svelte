@@ -11,7 +11,16 @@
 		{ id: 'A', rawForm: 'This', normalForm: 'this' },
 		{ id: 'B', rawForm: 'is', normalForm: 'is' },
 		{ id: 'C', rawForm: 'a', normalForm: 'a' },
-		{ id: 'D', rawForm: 'text.', normalForm: 'text' }
+		{ id: 'D', rawForm: 'text.', normalForm: 'text' },
+		{ id: 'D1', rawForm: 'That', normalForm: 'that' },
+		{ id: 'D2', rawForm: 'sea', normalForm: 'sea' },
+		{ id: 'D3', rawForm: 'is', normalForm: 'is' },
+		{ id: 'D4', rawForm: 'blue.', normalForm: 'blue' },
+		{ id: 'E', rawForm: 'Click', normalForm: 'click' },
+		{ id: 'F', rawForm: 'on', normalForm: 'on' },
+		{ id: 'G', rawForm: 'the', normalForm: 'the' },
+		{ id: 'H', rawForm: 'second', normalForm: 'second' },
+		{ id: 'I', rawForm: 'word.', normalForm: 'word' },
 	];
 </script>
 
