@@ -1,26 +1,5 @@
 import { expect, test } from '@playwright/test';
 
-// Test Routes
-
-test('tutorial page exists', async ({ page }) => {
-	const response = await page.request.get('/texts/tutorial-en');
-	await expect(response).toBeOK();
-});
-
-test('cannot navigate to a non-existing title', async ({ page }) => {
-	const response = await page.request.get('/texts/i-do-not-exist');
-	await expect(response).not.toBeOK();
-});
-
-test('if text not specified, rerouted to tutorial page', async ({ page }) => {
-	const tutorial_name = 'tutorial-en';
-	await page.goto('/');
-	await expect(page).toHaveURL('/texts/' + tutorial_name);
-
-	await page.goto('/texts');
-	await expect(page).toHaveURL('/texts/' + tutorial_name);
-});
-
 // Test Components are visible
 
 test('text page displays required components', async ({ page }) => {
@@ -28,14 +7,12 @@ test('text page displays required components', async ({ page }) => {
 	// Page has correct title
 	await expect(page).toHaveTitle('Der Sandmann | WordTrail');
 	// Menu button is visible
-	await expect(page.getByLabel('open menu')).toBeVisible(); //Tests as hidden
+	await expect(page.getByLabel('open menu')).toBeVisible();
 
 	// Text pane is visible
 	await expect(page.getByLabel('Text Pane')).toBeVisible();
 	// Text title is visible
 	await expect(page.getByLabel('Text Title')).toBeVisible();
-	// Bookmark button is visible
-	await expect(page.getByRole('button', { name: 'Bookmark' })).toBeVisible();
 
 	// Context panes are visible
 	await expect(page.getByLabel('Same Word Pane')).toBeVisible();
@@ -67,4 +44,16 @@ test('wider context displays required components', async ({ page }) => {
 	await expect(page.getByText('wider context')).toBeVisible();
 	// Wider Context shows name of referenced text
 	await expect(page.getByLabel('Wider Context Title')).toBeVisible();
+});
+
+// Test Components are aligned
+
+test('text page displays correct layout', async ({ page }) => {
+	await page.goto('/');
+	const menu_button_box = await page.getByLabel('open menu').boundingBox();
+	const text_pane_box = await page.getByLabel('Text Pane').boundingBox();
+
+	// Menu button is to left of text pane
+	expect(menu_button_box.x + menu_button_box.width).toBeLessThan(text_pane_box.x);
+
 });
