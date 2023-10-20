@@ -7,6 +7,7 @@ This app currently deploys to Vercel. This has implications for how to install a
 The following steps are tested only on Linux (WSL2 - Ubuntu 20.04).
 
 Before beginning, ensure you are using Node 18 (for Vercel): if using nvm, run `nvm use 18 `.
+
 Then install dependencies with `npm install` (or `pnpm install` or `yarn`).
 
 If you would like to run playwright tests,
@@ -23,7 +24,11 @@ Run tests: `npm run test`
 ## Building
 
 Deploy to vercel, using vercel docs and SvelteKit template. This will create a vercel project.
+
 Link this development folder to vercel: `vercel  link`
+
 Create a vercel postgres db, using vercel docs, and connect to created vercel project.
+
 Pull vercel environment variables: `vercel env pull .env.development.local`
+
 Verify creating a table works: Navigate to `/api/create-pets-table` in the browser.

@@ -5,11 +5,7 @@
 
 	export let data: PageData;
 
-	let similarityTypes = [
-		{ id: 'same', name: 'Same Word', heading: 'In other contexts...' },
-		{ id: 'spelling', name: 'Similar Spellings', heading: 'Similar Spellings...' },
-		{ id: 'meaning', name: 'Similar Meanings', heading: 'Similar Meanings...' }
-	];
+	let similarityTypes = [{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }];
 
 	let text = [
 		{ id: 'A', rawForm: 'This', normalForm: 'this' },
@@ -22,9 +18,9 @@
 <svelte:head>
 	<title>Der Sandmann | WordTrail</title>
 </svelte:head>
-<div class="grid grid-cols-2 gap-x-10 grid-rows-[10vh,80vh,6vh] grid-flow-col mx-16">
+<div class="grid grid-cols-2 gap-x-10 grid-rows-[10vh,25vh,25vh,25vh,6vh] grid-flow-col mx-16">
 	<div class="" />
-	<div class="rounded bg-neutral p-3 text-xs text-primary overflow-y-auto">
+	<div class="row-span-3 rounded bg-neutral p-3 text-xs text-primary overflow-y-auto">
 		<form aria-label="Text Pane">
 			{#each text as word}
 				<Word id={word.id} rawForm={word.rawForm} />
