@@ -55,5 +55,4 @@ test('text page displays correct layout', async ({ page }) => {
 
 	// Menu button is to left of text pane
 	expect(menu_button_box.x + menu_button_box.width).toBeLessThan(text_pane_box.x);
-
 });

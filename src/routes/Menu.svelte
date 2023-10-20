@@ -5,8 +5,11 @@
 <div class="drawer">
 	<input id="menu-drawer" type="checkbox" class="drawer-toggle" />
 	<div class="drawer-content">
-		<label for="menu-drawer" aria-label="open menu" class="btn btn-accent drawer-button absolute top-12 left-0 rounded-none"
-			/>
+		<label
+			for="menu-drawer"
+			aria-label="open menu"
+			class="btn btn-accent drawer-button absolute top-12 left-0 rounded-none"
+		/>
 		<slot />
 	</div>
 	<div class="drawer-side">
