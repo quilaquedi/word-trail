@@ -13,6 +13,7 @@ Create and activate a virtual environment: `python -m venv .env && source .env/b
 Upgrade pip and install requirements: `pip install --upgrade pip && pip install -r requirements.txt`
 
 ## Usage
+All stores are currently tables in a SQLite database, but may connect to Vercel Postgres DBs in the future.
 
 ### init-stores
 
@@ -20,7 +21,7 @@ Upgrade pip and install requirements: `pip install --upgrade pip && pip install 
 python init-stores.py
 ```
 
-This script will initialize the `texts`, `words`, `distances`, and `contexts` stores as .csv files in the `stores` directory.
+This script will create `texts`, `words`, `distances`, and `contexts` stores as tables in the SQLite database `data/wordtrail.db`.
 
 ### post-text
 
@@ -35,5 +36,3 @@ This script will:
 - Add all words in the text to the `words` store.
 - Add surrounding context for all words in the text to the `contexts` store.
 - Compute distances between all new word pairs in the words store and add them to the `distances` store.
-
-All stores are currently .csv files but may become database tables in the future.
