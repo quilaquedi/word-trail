@@ -2,7 +2,7 @@ import pytest
 import subprocess
 
 from pathlib import Path
-from ..models import db, Text
+from ..models import db, Text, Word
 
 TEST_DIR = Path(__file__).parent
 
@@ -43,11 +43,27 @@ def test_post_text(test_db):
     db.connect()
 
     # Check correct text entry created
-    expected_stored_contents = 'This is a "sample" text.\n\n With newlines!'
-    text_entries = Text.select()
-    assert len([_ for _ in text_entries]) == 1
-    assert Text.select().where(Text.title == "sample").get().contents == expected_stored_contents
+    expected_stored_contents = 'This is a "sample" text.\n\n With newlines  !'
+
+    stored_texts = Text.select()
+    stored_text = stored_texts.where(Text.title == "sample").get()
+
+    assert len(stored_texts) == 1
+    assert stored_text.contents == expected_stored_contents
 
     # Check correct words created
+    expected_raw_forms = ['This', 'is', 'a', '"sample"', 'text.', 'With', 'newlines','!']
+    expected_normal_forms = ["this", "is", "a", "sample", "text", "with", "newlines", "!"]
+    expected_text_poss = [0, 1, 2, 3, 4, 6, 7, 8]
+
+    stored_words = Word.select()
+    for i, stored_word in enumerate(stored_words):
+        assert stored_word.raw_form == expected_raw_forms[i]
+        assert stored_word.normal_form == expected_normal_forms[i]
+        assert stored_word.text_id.id == stored_text.id
+        assert stored_word.text_pos == expected_text_poss[i]
+
+
+
 
     db.close()

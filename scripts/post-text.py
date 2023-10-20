@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from pathlib import Path
+import re
 
 from models import db, Text, Word
 from loguru import logger
@@ -7,7 +8,10 @@ from loguru import logger
 DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
 
 def clean_word(word: str):
-    return word
+    if re.fullmatch(pattern=r"\W+", string=word):
+        return word
+    else:
+        return re.sub(pattern=r"^\W*(.*\w)\W*$",repl=r"\1", string=word.lower())
 
 parser = ArgumentParser(description="Adds a text to the corpus.")
 parser.add_argument("--title", type=str, required=False)
@@ -26,11 +30,13 @@ else:
 text = Text(title=text_title, contents=text_contents)
 
 # Parse words in text
-# raw_words = text_contents.split(" ")
-# words = [
-#     Word(raw_form=word, normal_form=clean_word(word), text_id=None, text_pos=i)
-#     for i, word in enumerate(raw_words)
-# ]
+cleaned_newlines = re.sub(pattern=f"\s*\n\s*", repl=" \n ", string=text_contents)
+raw_words_with_newlines = re.split(pattern = " +", string=cleaned_newlines)
+words = [
+    Word(raw_form=word, normal_form=clean_word(word), text_id=None, text_pos=i)
+    for i, word in enumerate(raw_words_with_newlines)
+    if word != "\n"
+]
 
 # Connect to the database
 db.init(args.database)
@@ -41,9 +47,9 @@ text.save()
 logger.info(f"Text record for {text_title} created.")
 
 # Add words to the database
-# for word in words:
-#     word.text_id = text.id
-#     word.save()
+for word in words:
+    word.text_id = text.id
+    word.save()
 
 
 # Close database connection
