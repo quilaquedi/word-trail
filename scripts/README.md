@@ -1,6 +1,6 @@
 # README
 
-This directory contains scripts to generate data for the WordTrail app.
+This directory contains scripts to generate data for the WordTrail app. As the scripts are for local use, input validation (e.g. for language codes) is not thorough.
 
 Source texts are available in the `data` directory.
 
@@ -13,6 +13,7 @@ Create and activate a virtual environment: `python -m venv .env && source .env/b
 Upgrade pip and install requirements: `pip install --upgrade pip && pip install -r requirements.txt`
 
 ## Usage
+
 All stores are currently tables in a SQLite database, but may connect to Vercel Postgres DBs in the future.
 
 ### init-stores
