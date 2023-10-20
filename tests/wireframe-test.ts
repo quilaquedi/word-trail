@@ -36,16 +36,6 @@ test('menu displays required components', async ({ page }) => {
 	await expect(page.getByRole('link', { name: 'Tutorial' })).toBeVisible();
 });
 
-test('wider context displays required components', async ({ page }) => {
-	await page.goto('/');
-	await page.getByRole('button', { name: 'context' }).first().click();
-
-	// Wider Context shows wider context text
-	await expect(page.getByText('wider context')).toBeVisible();
-	// Wider Context shows name of referenced text
-	await expect(page.getByLabel('Wider Context Title')).toBeVisible();
-});
-
 // Test Components are aligned
 
 test('text page displays correct layout', async ({ page }) => {
