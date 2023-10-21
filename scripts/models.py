@@ -9,7 +9,7 @@ class BaseModel(Model):
 
 class Text(BaseModel):
     id = AutoField(primary_key=True)
-    title = CharField()
+    title = CharField(unique=True)
     contents = CharField()
 
 
@@ -22,15 +22,13 @@ class Word(BaseModel):
 
 
 
-class Distance(BaseModel):
-    base_id = ForeignKeyField(Word, backref="from_distances")
-    comp_id = ForeignKeyField(Word, backref="to_distances")
-    matching_value = BooleanField()
+class WordComparison(BaseModel):
+    base_id = ForeignKeyField(Word, backref="from_comparisons")
+    comp_id = ForeignKeyField(Word, backref="to_comparisons")
+    is_match = BooleanField()
 
-
-
-class Context(BaseModel):
-    word_id = ForeignKeyField(Word, backref="contexts", primary_key=True)
-    start_pos = IntegerField()
-    end_pos = IntegerField
-    
+    class Meta:
+        indexes = (
+            # Specify a unique multi-column index
+            (('base_id', 'comp_id'), True),
+        )

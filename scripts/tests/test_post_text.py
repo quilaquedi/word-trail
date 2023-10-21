@@ -2,7 +2,7 @@ import pytest
 import subprocess
 
 from pathlib import Path
-from ..models import db, Text, Word
+from ..models import db, Text, Word, WordComparison
 
 TEST_DIR = Path(__file__).parent
 
@@ -43,7 +43,7 @@ def test_post_text(test_db):
     db.connect()
 
     # Check correct text entry created
-    expected_stored_contents = 'This is a "sample" text.\n\n With newlines  !'
+    expected_stored_contents = 'This is a "sample" text.\n\n With newlines  ! A\n'
 
     stored_texts = Text.select()
     stored_text = stored_texts.where(Text.title == "sample").get()
@@ -52,9 +52,9 @@ def test_post_text(test_db):
     assert stored_text.contents == expected_stored_contents
 
     # Check correct words created
-    expected_raw_forms = ['This', 'is', 'a', '"sample"', 'text.', 'With', 'newlines','!']
-    expected_normal_forms = ["this", "is", "a", "sample", "text", "with", "newlines", "!"]
-    expected_text_poss = [0, 1, 2, 3, 4, 6, 7, 8]
+    expected_raw_forms = ['This', 'is', 'a', '"sample"', 'text.', 'With', 'newlines','!', 'A']
+    expected_normal_forms = ["this", "is", "a", "sample", "text", "with", "newlines", "!", "a"]
+    expected_text_poss = [0, 1, 2, 3, 4, 6, 7, 8, 9]
 
     stored_words = Word.select()
     for i, stored_word in enumerate(stored_words):
@@ -63,7 +63,29 @@ def test_post_text(test_db):
         assert stored_word.text_id.id == stored_text.id
         assert stored_word.text_pos == expected_text_poss[i]
 
-
-
+    # Check correct word comparisons created
+    BaseWord = Word.alias()
+    CompWord = Word.alias()
+    comparisons = (
+        WordComparison
+        .select(WordComparison, BaseWord, CompWord)
+        .join(
+            BaseWord, 
+            on=(WordComparison.base_id == BaseWord.id),
+            attr="base_word"
+        )
+        .switch(WordComparison)
+        .join(
+            CompWord, 
+            on=(WordComparison.comp_id == CompWord.id),
+            attr="comp_word"
+        )
+    )
+    assert len(comparisons) == 36
+    stored_matches = comparisons.where(WordComparison.is_match == True)
+    assert len(stored_matches) == 1
+    for stored_match in stored_matches:
+        assert stored_match.base_word.text_pos == 2
+        assert stored_match.comp_word.text_pos == 9
 
     db.close()

@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 import re
 
-from models import db, Text, Word
+from models import db, Text, Word, WordComparison
 from loguru import logger
 
 DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
@@ -35,7 +35,19 @@ raw_words_with_newlines = re.split(pattern = " +", string=cleaned_newlines)
 words = [
     Word(raw_form=word, normal_form=clean_word(word), text_id=None, text_pos=i)
     for i, word in enumerate(raw_words_with_newlines)
-    if word != "\n"
+    if word not in ["\n", ""]
+]
+
+# Make word comparisons
+comparisons = [
+    {
+        "base_word": base_word,
+        "comp_word": comp_word,
+        "is_match": (base_word.normal_form == comp_word.normal_form)
+    }
+    for base_word in words
+    for comp_word in words
+    if base_word.text_pos < comp_word.text_pos
 ]
 
 # Connect to the database
@@ -50,6 +62,16 @@ logger.info(f"Text record for {text_title} created.")
 for word in words:
     word.text_id = text.id
     word.save()
+logger.info(f"{len(words)} word records created for {text_title}.")
+
+# Add word comparisons to the database
+for comparison in comparisons:
+    WordComparison(
+        base_id=comparison["base_word"].id, 
+        comp_id=comparison["comp_word"].id, 
+        is_match=comparison["is_match"]
+    ).save()
+logger.info(f"{len(comparisons)} word comparison records created for {text_title}.")
 
 
 # Close database connection
