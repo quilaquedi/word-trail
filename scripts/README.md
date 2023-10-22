@@ -12,6 +12,8 @@ Create and activate a virtual environment: `python -m venv .env && source .env/b
 
 Upgrade pip and install requirements: `pip install --upgrade pip && pip install -r requirements.txt`
 
+Install pre-commit hooks: `pre-commit install`
+
 ## Usage
 
 All stores are currently tables in a SQLite database, but may connect to Vercel Postgres DBs in the future.

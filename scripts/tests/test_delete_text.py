@@ -2,20 +2,16 @@ import pytest
 import subprocess
 
 from pathlib import Path
-from ..models import db, Text, Word, WordComparison
+from ..models import db, Text
 
 TEST_DIR = Path(__file__).parent
+
 
 @pytest.fixture(scope="module")
 def setup_test_db():
     # Create test sqlite db
-    db_path = TEST_DIR/"data"/"wordtrail.db"
-    args = [
-        "python",
-        TEST_DIR.parent / "init-stores.py",
-        "--db_path",
-        db_path
-    ]
+    db_path = TEST_DIR / "data" / "wordtrail.db"
+    args = ["python", TEST_DIR.parent / "init-stores.py", "--db_path", db_path]
     subprocess.run(args, check=True)
     # Initialize test db
     db.init(db_path)
@@ -33,11 +29,11 @@ def test_delete_text(setup_test_db):
         "python",
         TEST_DIR.parent / "post-text.py",
         "--filepath",
-        TEST_DIR/"data"/"source_texts"/"sample.txt",
+        TEST_DIR / "data" / "source_texts" / "sample.txt",
         "--language",
         "EN",
         "--database",
-        test_db
+        test_db,
     ]
     subprocess.run(post_1_args, check=True)
 
@@ -45,11 +41,11 @@ def test_delete_text(setup_test_db):
         "python",
         TEST_DIR.parent / "post-text.py",
         "--filepath",
-        TEST_DIR/"data"/"source_texts"/"Text 1.txt",
+        TEST_DIR / "data" / "source_texts" / "Text 1.txt",
         "--language",
         "EN",
         "--database",
-        test_db
+        test_db,
     ]
     subprocess.run(post_2_args, check=True)
 
@@ -61,7 +57,7 @@ def test_delete_text(setup_test_db):
         "--title",
         DELETED_TITLE,
         "--database",
-        test_db
+        test_db,
     ]
     subprocess.run(args, check=True)
 

@@ -7,11 +7,13 @@ from loguru import logger
 
 DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
 
+
 def clean_word(word: str):
     if re.fullmatch(pattern=r"\W+", string=word):
         return word
     else:
-        return re.sub(pattern=r"^\W*(.*\w)\W*$",repl=r"\1", string=word.lower())
+        return re.sub(pattern=r"^\W*(.*\w)\W*$", repl=r"\1", string=word.lower())
+
 
 parser = ArgumentParser(description="Adds a text to the corpus.")
 parser.add_argument("--title", type=str, required=False)
@@ -30,8 +32,8 @@ else:
 text = Text(title=text_title, contents=text_contents)
 
 # Parse words in text
-cleaned_newlines = re.sub(pattern=f"\s*\n\s*", repl=" \n ", string=text_contents)
-raw_words_with_newlines = re.split(pattern = " +", string=cleaned_newlines)
+cleaned_newlines = re.sub(pattern=r"\s*\n\s*", repl=" \n ", string=text_contents)
+raw_words_with_newlines = re.split(pattern=" +", string=cleaned_newlines)
 words = [
     Word(raw_form=word, normal_form=clean_word(word), text_id=None, text_pos=i)
     for i, word in enumerate(raw_words_with_newlines)
@@ -58,7 +60,7 @@ within_text_comparisons = [
     {
         "base_word": base_word,
         "comp_word": comp_word,
-        "is_match": (base_word.normal_form == comp_word.normal_form)
+        "is_match": (base_word.normal_form == comp_word.normal_form),
     }
     for base_word in words
     for comp_word in words
@@ -68,7 +70,7 @@ across_text_comparisons = [
     {
         "base_word": base_word,
         "comp_word": comp_word,
-        "is_match": (base_word.normal_form == comp_word.normal_form)
+        "is_match": (base_word.normal_form == comp_word.normal_form),
     }
     for base_word in all_words
     for comp_word in words
@@ -79,9 +81,9 @@ comparisons = within_text_comparisons + across_text_comparisons
 # Add word comparisons to the database
 for comparison in comparisons:
     WordComparison(
-        base_id=comparison["base_word"].id, 
-        comp_id=comparison["comp_word"].id, 
-        is_match=comparison["is_match"]
+        base_id=comparison["base_word"].id,
+        comp_id=comparison["comp_word"].id,
+        is_match=comparison["is_match"],
     ).save()
 logger.info(f"{len(comparisons)} word comparison records created for {text_title}.")
 

@@ -6,16 +6,12 @@ from ..models import db, Text, Word, WordComparison
 
 TEST_DIR = Path(__file__).parent
 
+
 @pytest.fixture(scope="module")
 def setup_test_db():
     # Create test sqlite db
-    db_path = TEST_DIR/"data"/"wordtrail.db"
-    args = [
-        "python",
-        TEST_DIR.parent / "init-stores.py",
-        "--db_path",
-        db_path
-    ]
+    db_path = TEST_DIR / "data" / "wordtrail.db"
+    args = ["python", TEST_DIR.parent / "init-stores.py", "--db_path", db_path]
     subprocess.run(args, check=True)
     # Initialize test db
     db.init(db_path)
@@ -24,6 +20,7 @@ def setup_test_db():
 
     # Teardown test db
     subprocess.run(["rm", db_path], check=True)
+
 
 @pytest.fixture(scope="function")
 def test_db(setup_test_db):
@@ -46,11 +43,11 @@ def test_post_first_text(test_db):
         "python",
         TEST_DIR.parent / "post-text.py",
         "--filepath",
-        TEST_DIR/"data"/"source_texts"/"sample.txt",
+        TEST_DIR / "data" / "source_texts" / "sample.txt",
         "--language",
         "EN",
         "--database",
-        test_db
+        test_db,
     ]
     subprocess.run(args, check=True)
 
@@ -67,8 +64,28 @@ def test_post_first_text(test_db):
     assert stored_text.contents == expected_stored_contents
 
     # Check correct words created
-    expected_raw_forms = ['This', 'is', 'a', '"sample"', 'text.', 'With', 'newlines','!', 'A']
-    expected_normal_forms = ["this", "is", "a", "sample", "text", "with", "newlines", "!", "a"]
+    expected_raw_forms = [
+        "This",
+        "is",
+        "a",
+        '"sample"',
+        "text.",
+        "With",
+        "newlines",
+        "!",
+        "A",
+    ]
+    expected_normal_forms = [
+        "this",
+        "is",
+        "a",
+        "sample",
+        "text",
+        "with",
+        "newlines",
+        "!",
+        "a",
+    ]
     expected_text_poss = [0, 1, 2, 3, 4, 6, 7, 8, 9]
 
     stored_words = Word.select()
@@ -82,19 +99,10 @@ def test_post_first_text(test_db):
     BaseWord = Word.alias()
     CompWord = Word.alias()
     comparisons = (
-        WordComparison
-        .select(WordComparison, BaseWord, CompWord)
-        .join(
-            BaseWord, 
-            on=(WordComparison.base_id == BaseWord.id),
-            attr="base_word"
-        )
+        WordComparison.select(WordComparison, BaseWord, CompWord)
+        .join(BaseWord, on=(WordComparison.base_id == BaseWord.id), attr="base_word")
         .switch(WordComparison)
-        .join(
-            CompWord, 
-            on=(WordComparison.comp_id == CompWord.id),
-            attr="comp_word"
-        )
+        .join(CompWord, on=(WordComparison.comp_id == CompWord.id), attr="comp_word")
     )
     assert len(comparisons) == 36
     stored_matches = comparisons.where(WordComparison.is_match == True)
@@ -105,28 +113,29 @@ def test_post_first_text(test_db):
 
     db.close()
 
+
 def test_post_additional_text(test_db):
     # Run commands
     args_1 = [
         "python",
         TEST_DIR.parent / "post-text.py",
         "--filepath",
-        TEST_DIR/"data"/"source_texts"/"Text 1.txt",
+        TEST_DIR / "data" / "source_texts" / "Text 1.txt",
         "--language",
         "EN",
         "--database",
-        test_db
+        test_db,
     ]
     subprocess.run(args_1, check=True)
     args_2 = [
         "python",
         TEST_DIR.parent / "post-text.py",
         "--filepath",
-        TEST_DIR/"data"/"source_texts"/"Text 2.txt",
+        TEST_DIR / "data" / "source_texts" / "Text 2.txt",
         "--language",
         "EN",
         "--database",
-        test_db
+        test_db,
     ]
     subprocess.run(args_2, check=True)
 
@@ -137,19 +146,10 @@ def test_post_additional_text(test_db):
     BaseWord = Word.alias()
     CompWord = Word.alias()
     comparisons = (
-        WordComparison
-        .select(WordComparison, BaseWord, CompWord)
-        .join(
-            BaseWord, 
-            on=(WordComparison.base_id == BaseWord.id),
-            attr="base_word"
-        )
+        WordComparison.select(WordComparison, BaseWord, CompWord)
+        .join(BaseWord, on=(WordComparison.base_id == BaseWord.id), attr="base_word")
         .switch(WordComparison)
-        .join(
-            CompWord, 
-            on=(WordComparison.comp_id == CompWord.id),
-            attr="comp_word"
-        )
+        .join(CompWord, on=(WordComparison.comp_id == CompWord.id), attr="comp_word")
     )
     assert len(comparisons) == 6
     stored_matches = comparisons.where(WordComparison.is_match == True)

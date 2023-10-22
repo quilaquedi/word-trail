@@ -6,11 +6,13 @@ from models import Text, Word, WordComparison, db
 
 DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
 
+
 def create_db(filepath: Path):
     db.init(filepath)
     with db:
         db.create_tables([Text, Word, WordComparison])
         logger.info(f"Tables created at {filepath}.")
+
 
 parser = ArgumentParser(description="Create DB tables.")
 parser.add_argument("--db_path", type=Path, default=DB_PATH)
