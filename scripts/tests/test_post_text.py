@@ -7,7 +7,7 @@ from ..models import db, Text, Word, WordComparison
 TEST_DIR = Path(__file__).parent
 
 @pytest.fixture(scope="module")
-def test_db():
+def setup_test_db():
     # Create test sqlite db
     db_path = TEST_DIR/"data"/"wordtrail.db"
     args = [
@@ -25,7 +25,22 @@ def test_db():
     # Teardown test db
     subprocess.run(["rm", db_path], check=True)
 
-def test_post_text(test_db):
+@pytest.fixture(scope="function")
+def test_db(setup_test_db):
+    yield setup_test_db
+
+    db.init(setup_test_db)
+    db.connect()
+
+    # Delete any data inserted during test execution
+    WordComparison.delete().execute()
+    Word.delete().execute()
+    Text.delete().execute()
+
+    db.close()
+
+
+def test_post_first_text(test_db):
     # Run command
     args = [
         "python",
@@ -89,3 +104,57 @@ def test_post_text(test_db):
         assert stored_match.comp_word.text_pos == 9
 
     db.close()
+
+def test_post_additional_text(test_db):
+    # Run commands
+    args_1 = [
+        "python",
+        TEST_DIR.parent / "post-text.py",
+        "--filepath",
+        TEST_DIR/"data"/"source_texts"/"Text 1.txt",
+        "--language",
+        "EN",
+        "--database",
+        test_db
+    ]
+    subprocess.run(args_1, check=True)
+    args_2 = [
+        "python",
+        TEST_DIR.parent / "post-text.py",
+        "--filepath",
+        TEST_DIR/"data"/"source_texts"/"Text 2.txt",
+        "--language",
+        "EN",
+        "--database",
+        test_db
+    ]
+    subprocess.run(args_2, check=True)
+
+    db.init(test_db)
+    db.connect()
+
+    # Check correct word comparisons created
+    BaseWord = Word.alias()
+    CompWord = Word.alias()
+    comparisons = (
+        WordComparison
+        .select(WordComparison, BaseWord, CompWord)
+        .join(
+            BaseWord, 
+            on=(WordComparison.base_id == BaseWord.id),
+            attr="base_word"
+        )
+        .switch(WordComparison)
+        .join(
+            CompWord, 
+            on=(WordComparison.comp_id == CompWord.id),
+            attr="comp_word"
+        )
+    )
+    assert len(comparisons) == 6
+    stored_matches = comparisons.where(WordComparison.is_match == True)
+    assert len(stored_matches) == 1
+    for stored_match in stored_matches:
+        assert stored_match.base_word.id != stored_match.comp_word.id
+        assert stored_match.base_word.text_pos == 1
+        assert stored_match.comp_word.text_pos == 1

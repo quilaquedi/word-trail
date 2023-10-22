@@ -38,18 +38,6 @@ words = [
     if word not in ["\n", ""]
 ]
 
-# Make word comparisons
-comparisons = [
-    {
-        "base_word": base_word,
-        "comp_word": comp_word,
-        "is_match": (base_word.normal_form == comp_word.normal_form)
-    }
-    for base_word in words
-    for comp_word in words
-    if base_word.text_pos < comp_word.text_pos
-]
-
 # Connect to the database
 db.init(args.database)
 db.connect()
@@ -63,6 +51,30 @@ for word in words:
     word.text_id = text.id
     word.save()
 logger.info(f"{len(words)} word records created for {text_title}.")
+
+# Make word comparisons
+all_words = Word.select()
+within_text_comparisons = [
+    {
+        "base_word": base_word,
+        "comp_word": comp_word,
+        "is_match": (base_word.normal_form == comp_word.normal_form)
+    }
+    for base_word in words
+    for comp_word in words
+    if base_word.text_pos < comp_word.text_pos
+]
+across_text_comparisons = [
+    {
+        "base_word": base_word,
+        "comp_word": comp_word,
+        "is_match": (base_word.normal_form == comp_word.normal_form)
+    }
+    for base_word in all_words
+    for comp_word in words
+    if base_word.text_id != comp_word.text_id
+]
+comparisons = within_text_comparisons + across_text_comparisons
 
 # Add word comparisons to the database
 for comparison in comparisons:
