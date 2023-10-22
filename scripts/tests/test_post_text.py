@@ -158,3 +158,19 @@ def test_post_additional_text(test_db):
         assert stored_match.base_word.id != stored_match.comp_word.id
         assert stored_match.base_word.text_pos == 1
         assert stored_match.comp_word.text_pos == 1
+
+
+def test_when_invalid_language_code(test_db):
+    # Run command
+    args = [
+        "python",
+        TEST_DIR.parent / "post-text.py",
+        "--filepath",
+        TEST_DIR / "data" / "source_texts" / "sample.txt",
+        "--language",
+        "ER",
+        "--database",
+        test_db,
+    ]
+    with pytest.raises(subprocess.CalledProcessError):
+        subprocess.run(args, check=True)

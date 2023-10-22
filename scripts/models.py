@@ -6,6 +6,8 @@ from peewee import (
     ForeignKeyField,
     IntegerField,
     BooleanField,
+    TextField,
+    FixedCharField,
 )
 
 
@@ -20,7 +22,8 @@ class BaseModel(Model):
 class Text(BaseModel):
     id = AutoField(primary_key=True)
     title = CharField(unique=True)
-    contents = CharField()
+    contents = TextField()
+    language = FixedCharField(max_length=2)
 
 
 class Word(BaseModel):

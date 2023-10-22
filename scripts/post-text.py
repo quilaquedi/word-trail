@@ -1,11 +1,13 @@
 from argparse import ArgumentParser
 from pathlib import Path
+import json
 import re
 
 from models import db, Text, Word, WordComparison
 from loguru import logger
 
 DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
+LANGUAGE_CODES_PATH = Path(__file__).parent / "data" / "languages.json"
 
 
 def clean_word(word: str):
@@ -22,6 +24,16 @@ parser.add_argument("--language", type=str, required=True)
 parser.add_argument("--database", type=Path, default=DB_PATH)
 args = parser.parse_args()
 
+# Check language is a valid ISO 639-1 code
+language = args.language.lower()
+
+valid_codes = []
+with open(LANGUAGE_CODES_PATH) as f:
+    valid_codes = [json.loads(line)["Code"] for line in f]
+
+if language not in valid_codes:
+    raise ValueError("Language must be a valid ISO 639-I code.")
+
 # Read the text and title
 with open(args.filepath) as f:
     text_contents = f.read()
@@ -29,7 +41,7 @@ if args.title:
     text_title = args.title
 else:
     text_title = args.filepath.stem
-text = Text(title=text_title, contents=text_contents)
+text = Text(title=text_title, contents=text_contents, language=language)
 
 # Parse words in text
 cleaned_newlines = re.sub(pattern=r"\s*\n\s*", repl=" \n ", string=text_contents)
