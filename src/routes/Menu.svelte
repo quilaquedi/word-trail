@@ -20,7 +20,7 @@
 				<details open>
 					<summary>Deutsch</summary>
 					<ul>
-						<li><a href="/texts/der-sandmann">Der Sandmann</a></li>
+						<li><a href="/texts/y-der-sandmann">Der Sandmann</a></li>
 					</ul>
 				</details>
 				<details open>

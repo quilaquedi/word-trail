@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 // Test Components are visible
 
 test('text page displays required components', async ({ page }) => {
-	await page.goto('/texts/der-sandmann');
+	await page.goto('/texts/y-der-sandmann');
 	// Page has correct title
 	await expect(page).toHaveTitle('Der Sandmann | WordTrail');
 	// Menu button is visible

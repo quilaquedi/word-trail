@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-	<title>Der Sandmann | WordTrail</title>
+	<title>{data.textTitle} | WordTrail</title>
 </svelte:head>
 <div class="grid grid-cols-2 gap-x-10 grid-rows-[10vh,25vh,25vh,25vh,6vh] grid-flow-col mx-16">
 	<div class="" />
@@ -37,7 +37,7 @@
 		</form>
 	</div>
 	<div>
-		<cite aria-label="Text Title" class="text-sm text-accent font-light">Der Sandmann</cite>
+		<cite aria-label="Text Title" class="text-sm text-accent font-light">{data.textTitle}</cite>
 	</div>
 
 	<div class="relative">

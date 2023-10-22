@@ -1,10 +1,6 @@
 import type { PageServerLoad } from './$types';
 
-
-
-// Load contexts for selected word
-export const load = (({ url }) => {
-	let wordId = url.searchParams.get('word');
+function loadContexts(wordId: string) {
 	let context;
 	let contexts = { same: [], spelling: [], meaning: [] };
 	switch (wordId) {
@@ -19,7 +15,33 @@ export const load = (({ url }) => {
 		default:
 			contexts = { same: [], spelling: [], meaning: [] };
 	}
+	return contexts;
+}
+
+function loadTextTitle(textId: string) {
+	let title: string;
+	switch (textId) {
+		case 'x':
+			title="Tutorial";
+			break;
+		case 'y':
+			title="Der Sandmann";
+			break;
+		default:
+			title="";
+	}
+	return title;
+}
+
+// Load text
+// Load contexts for selected word
+export const load = (({ url }) => {
+	const wordId = url.searchParams.get('word');
+	const textId = url.pathname.split("/").at(-1).split("-")[0];
+	const textTitle = loadTextTitle(textId);
+	const contexts = loadContexts(wordId);
 	return {
-		contexts: contexts
+		contexts: contexts,
+		textTitle: textTitle
 	};
 }) satisfies PageServerLoad;
