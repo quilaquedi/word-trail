@@ -104,12 +104,10 @@ def test_post_first_text(test_db):
         .switch(WordComparison)
         .join(CompWord, on=(WordComparison.comp_id == CompWord.id), attr="comp_word")
     )
-    assert len(comparisons) == 36
-    stored_matches = comparisons.where(WordComparison.is_match == True)
-    assert len(stored_matches) == 1
-    for stored_match in stored_matches:
-        assert stored_match.base_word.text_pos == 2
-        assert stored_match.comp_word.text_pos == 9
+    assert len(comparisons) == 1
+    for comparison in comparisons:
+        assert comparison.base_word.text_pos == 2
+        assert comparison.comp_word.text_pos == 9
 
     db.close()
 
@@ -151,13 +149,11 @@ def test_post_additional_text(test_db):
         .switch(WordComparison)
         .join(CompWord, on=(WordComparison.comp_id == CompWord.id), attr="comp_word")
     )
-    assert len(comparisons) == 6
-    stored_matches = comparisons.where(WordComparison.is_match == True)
-    assert len(stored_matches) == 1
-    for stored_match in stored_matches:
-        assert stored_match.base_word.id != stored_match.comp_word.id
-        assert stored_match.base_word.text_pos == 1
-        assert stored_match.comp_word.text_pos == 1
+    assert len(comparisons) == 1
+    for comparison in comparisons:
+        assert comparison.base_word.id != comparison.comp_word.id
+        assert comparison.base_word.text_pos == 1
+        assert comparison.comp_word.text_pos == 1
 
 
 def test_when_invalid_language_code(test_db):

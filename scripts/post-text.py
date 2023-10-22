@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
 LANGUAGE_CODES_PATH = Path(__file__).parent / "data" / "languages.json"
-INSERT_BATCH_SIZE = 60_000
+INSERT_BATCH_SIZE = 75_000
 
 
 def clean_word(word: str):
@@ -19,14 +19,17 @@ def clean_word(word: str):
         return re.sub(pattern=r"^\W*(.*\w)\W*$", repl=r"\1", string=word.lower())
 
 
-def compare_words(word_pair) -> WordComparison:
+def compare_words(word_pair):
     base_word, comp_word = word_pair
-    match_comparison = base_word["normal_form"] == comp_word["normal_form"]
-    return WordComparison(
-        base_id=base_word["id"],
-        comp_id=comp_word["id"],
-        is_match=match_comparison,
-    )
+    is_match = base_word["normal_form"] == comp_word["normal_form"]
+    if is_match:
+        return WordComparison(
+            base_id=base_word["id"],
+            comp_id=comp_word["id"],
+            is_match=is_match,
+        )
+    else:
+        return None
 
 
 parser = ArgumentParser(description="Adds a text to the corpus.")
@@ -83,7 +86,6 @@ logger.info(f"{word_count} word records created for {text_title}.")
 
 # Make word comparisons
 
-# SQLite objects can't be used in another thread, so load words as dicts
 all_words = [x for x in Word.select().dicts()]
 new_words = [x for x in text.words.dicts()]  # Load inserted words to get their ids.
 
@@ -103,9 +105,11 @@ across_text_pairs = (
 # Add word comparisons to the database
 within_text_comparisons = tqdm(map(compare_words, within_text_pairs))
 across_text_comparisons = tqdm(map(compare_words, across_text_pairs))
+comparisons_to_store = (
+    x for x in (*within_text_comparisons, *across_text_comparisons) if x
+)
 with db.atomic():
-    WordComparison.bulk_create(within_text_comparisons, batch_size=INSERT_BATCH_SIZE)
-    WordComparison.bulk_create(across_text_comparisons, batch_size=INSERT_BATCH_SIZE)
+    WordComparison.bulk_create(comparisons_to_store, batch_size=INSERT_BATCH_SIZE)
 logger.info(f"Word comparison records created for {text_title}.")
 
 
