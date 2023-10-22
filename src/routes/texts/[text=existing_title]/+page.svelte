@@ -7,21 +7,6 @@
 
 	let similarityTypes = [{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }];
 
-	let text = [
-		{ id: 'A', rawForm: 'This', normalForm: 'this' },
-		{ id: 'B', rawForm: 'is', normalForm: 'is' },
-		{ id: 'C', rawForm: 'a', normalForm: 'a' },
-		{ id: 'D', rawForm: 'text.', normalForm: 'text' },
-		{ id: 'D1', rawForm: 'That', normalForm: 'that' },
-		{ id: 'D2', rawForm: 'sea', normalForm: 'sea' },
-		{ id: 'D3', rawForm: 'is', normalForm: 'is' },
-		{ id: 'D4', rawForm: 'blue.', normalForm: 'blue' },
-		{ id: 'E', rawForm: 'Click', normalForm: 'click' },
-		{ id: 'F', rawForm: 'on', normalForm: 'on' },
-		{ id: 'G', rawForm: 'the', normalForm: 'the' },
-		{ id: 'H', rawForm: 'second', normalForm: 'second' },
-		{ id: 'I', rawForm: 'word.', normalForm: 'word' },
-	];
 </script>
 
 <svelte:head>
@@ -31,8 +16,14 @@
 	<div class="" />
 	<div class="row-span-3 rounded bg-neutral p-3 text-xs text-primary overflow-y-auto">
 		<form aria-label="Text Pane">
-			{#each text as word}
-				<Word id={word.id} rawForm={word.rawForm} />
+			{#each data.text as word, i}
+				<!-- Insert a newline if there's a missing textPos between two
+				adjacent words -->
+				{#if i > 1 && (word.textPos > data.text[i-1].textPos + 1)}
+					<br>
+					<br>
+				{/if}
+					<Word id={word.id} rawForm={word.rawForm} />
 			{/each}
 		</form>
 	</div>

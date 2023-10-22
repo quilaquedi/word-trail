@@ -1,9 +1,9 @@
 <script lang="ts">
-	export let wordId: string;
+	export const compId: string  = "a";
 	export let text: string;
-	export let wordPosition;
+	export let wordLoc: number[];
 </script>
 
-...{text.slice(0, wordPosition[0])}
-<b class="italic">{text.slice(...wordPosition)}</b>
-{text.slice(wordPosition[1])}
+...{text.slice(0, wordLoc[0])}
+<b class="italic">{text.slice(...wordLoc)}</b>
+{text.slice(wordLoc[1])}

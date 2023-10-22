@@ -73,7 +73,7 @@ db.connect()
 
 # Add text to the database
 text.save()
-logger.info(f"Text record for {text_title} created.")
+logger.info(f"Text {text_title} inserted at index {text.id}.")
 
 # Add words to the database
 word_count = 0

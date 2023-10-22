@@ -3,9 +3,9 @@ import { expect, test } from '@playwright/test';
 // Test Components are visible
 
 test('text page displays required components', async ({ page }) => {
-	await page.goto('/texts/y-der-sandmann');
+	await page.goto('/texts/1-immensee');
 	// Page has correct title
-	await expect(page).toHaveTitle('Der Sandmann | WordTrail');
+	await expect(page).toHaveTitle('Immensee | WordTrail');
 	// Menu button is visible
 	await expect(page.getByLabel('open menu')).toBeVisible();
 
@@ -30,7 +30,7 @@ test('menu displays required components', async ({ page }) => {
 	await expect(page.getByText('Deutsch', { exact: true })).toBeVisible();
 	await expect(page.getByText('English', { exact: true })).toBeVisible();
 	// Menu shows texts
-	await expect(page.getByRole('link', { name: 'Der Sandmann' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'Immensee' })).toBeVisible();
 	await expect(page.getByRole('link', { name: 'Tutorial' })).toBeVisible();
 });
 
