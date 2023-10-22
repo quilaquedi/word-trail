@@ -1,8 +1,14 @@
 # README
 
-This directory contains scripts to generate data for the WordTrail app. As the scripts are for local use, input validation (e.g. for language codes) is not thorough.
+This directory contains scripts to generate data for the WordTrail app.
 
-Source texts are available in the `data` directory.
+Source texts are available in the `../data` directory.
+
+To recreate the dev database, follow steps for installation, and then run:
+```[bash]
+    python init-stores.py
+    python post-text.py --filepath data/source_texts/Immensee.txt --language de
+```
 
 ## Installation
 

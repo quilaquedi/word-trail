@@ -7,8 +7,8 @@ from models import db, Text, Word, WordComparison
 from loguru import logger
 from tqdm import tqdm
 
-DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
-LANGUAGE_CODES_PATH = Path(__file__).parent / "data" / "languages.json"
+DB_PATH = Path(__file__).parent.parent / "data" / "wordtrail.db"
+LANGUAGE_CODES_PATH = Path(__file__).parent.parent / "data" / "languages.json"
 INSERT_BATCH_SIZE = 75_000
 
 

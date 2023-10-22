@@ -21,6 +21,8 @@ Start the server: `npm run dev``
 
 Run tests: `npm run test`
 
+To add and remove texts from the database, see `scripts/README.md`
+
 ## Building
 
 Deploy to vercel, using vercel docs and SvelteKit template. This will create a vercel project.
