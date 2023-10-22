@@ -7,7 +7,7 @@ from loguru import logger
 DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
 
 parser = ArgumentParser(description="Removes a text from the corpus.")
-parser.add_argument("--title", type=str, required=False)
+parser.add_argument("--title", type=str, required=True)
 parser.add_argument("--database", type=Path, default=DB_PATH)
 args = parser.parse_args()
 
