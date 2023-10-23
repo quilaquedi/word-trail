@@ -9,7 +9,10 @@ const config: PlaywrightTestConfig = {
 	testDir: 'tests',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	projects: [
-		/* Test against desktop firefox browser only */
+		{
+			name: 'chromium',
+			use: { ...devices['Desktop Chrome'] }
+		},
 		{
 			name: 'firefox',
 			use: { ...devices['Desktop Firefox'] }

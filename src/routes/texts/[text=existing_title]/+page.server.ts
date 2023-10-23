@@ -4,7 +4,7 @@ import type {BetterSQLite3Database} from 'drizzle-orm/better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { eq } from 'drizzle-orm';
 import Database from 'better-sqlite3';
-import { text_, word } from '$lib/db_schema';
+import { text_, word } from '$lib/server/db_schema';
  
 const sqlite = new Database('data/wordtrail.db');
 const db: BetterSQLite3Database = drizzle(sqlite);

@@ -1,11 +1,17 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { Comparisons } from '$lib/types';
 	import RelatedContext from './RelatedContext.svelte';
 	import Word from './Word.svelte';
 
 	export let data: PageData;
 
-	let similarityTypes = [{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }];
+	type SimilarityType = {
+		id: keyof Comparisons,
+		name: string,
+		heading: string
+	};
+	let similarityTypes: SimilarityType[] = [{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }];
 
 </script>
 
