@@ -20,13 +20,23 @@
 				<details open>
 					<summary>Deutsch</summary>
 					<ul>
-						<li><a on:click={() => document.getElementById("close-menu").click()} href="/texts/1-immensee">Immensee</a></li>
+						<li>
+							<a
+								on:click={() => document.getElementById('close-menu').click()}
+								href="/texts/1-immensee">Immensee</a
+							>
+						</li>
 					</ul>
 				</details>
 				<details open>
 					<summary>English</summary>
 					<ul>
-						<li><a on:click={() => document.getElementById("close-menu").click()} href={tutorial_route}>Tutorial</a></li>
+						<li>
+							<a
+								on:click={() => document.getElementById('close-menu').click()}
+								href={tutorial_route}>Tutorial</a
+							>
+						</li>
 					</ul>
 				</details>
 			</li>

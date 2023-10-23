@@ -5,6 +5,7 @@ This directory contains scripts to generate data for the WordTrail app.
 Source texts are available in the `../data` directory.
 
 To recreate the dev database, follow steps for installation, and then run:
+
 ```[bash]
     python init-stores.py
     python post-text.py --filepath data/source_texts/Immensee.txt --language de
@@ -41,6 +42,7 @@ python scripts/post-text.py --filepath FILEPATH --language LANGUAGE-CODE
 LANGUAGE-CODE should be an ISO 639-1 code. Enclose TITLE and/or FILEPATH in quotes as needed (if it includes spaces or special characters).
 
 This script will:
+
 - Add the text to the `texts` store, with the name of the file as the title.
 - Add all words in the text to the `words` store.
 - Add surrounding context for all words in the text to the `contexts` store.

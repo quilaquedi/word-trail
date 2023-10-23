@@ -7,12 +7,13 @@
 	export let data: PageData;
 
 	type SimilarityType = {
-		id: keyof Comparisons,
-		name: string,
-		heading: string
+		id: keyof Comparisons;
+		name: string;
+		heading: string;
 	};
-	let similarityTypes: SimilarityType[] = [{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }];
-
+	let similarityTypes: SimilarityType[] = [
+		{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }
+	];
 </script>
 
 <svelte:head>
@@ -25,11 +26,11 @@
 			{#each data.text as word, i}
 				<!-- Insert a newline if there's a missing textPos between two
 				adjacent words -->
-				{#if i > 1 && (word.textPos > data.text[i-1].textPos + 1)}
-					<br>
-					<br>
+				{#if i > 1 && word.textPos > data.text[i - 1].textPos + 1}
+					<br />
+					<br />
 				{/if}
-					<Word id={word.id} rawForm={word.rawForm} />
+				<Word id={word.id} rawForm={word.rawForm} />
 			{/each}
 		</form>
 	</div>
