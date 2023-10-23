@@ -13,20 +13,20 @@
 		<slot />
 	</div>
 	<div class="drawer-side">
-		<label for="menu-drawer" aria-label="close menu" class="drawer-overlay" />
+		<label id="close-menu" for="menu-drawer" aria-label="close menu" class="drawer-overlay" />
 		<div class="menu p-4 w-80 min-h-full bg-accent">
 			<header aria-label="app name">WordTrail</header>
 			<li>
 				<details open>
 					<summary>Deutsch</summary>
 					<ul>
-						<li><a href="/texts/1-immensee">Immensee</a></li>
+						<li><a on:click={() => document.getElementById("close-menu").click()} href="/texts/1-immensee">Immensee</a></li>
 					</ul>
 				</details>
 				<details open>
 					<summary>English</summary>
 					<ul>
-						<li><a href={tutorial_route}>Tutorial</a></li>
+						<li><a on:click={() => document.getElementById("close-menu").click()} href={tutorial_route}>Tutorial</a></li>
 					</ul>
 				</details>
 			</li>
