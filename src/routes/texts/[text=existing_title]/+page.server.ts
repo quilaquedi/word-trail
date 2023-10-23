@@ -91,10 +91,9 @@ function loadContexts(wordId: string | null) {
 	return contexts;
 }
 
-export const load = (({ url }) => {
+export const load = (({ url, params }) => {
 	// Load text
-	const slug = url.pathname.split("/").at(-1);
-	const textId = slug.split("-")[0];
+	const textId = params.text.split("-")[0];
 	const textTitle = loadTextTitle(textId);
 	const text = loadText(textId);
 
