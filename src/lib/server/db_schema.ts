@@ -6,8 +6,7 @@ export const text_ = sqliteTable('Text', {
   contents: text('contents'),
   language: text('language'),
 })
- 
-export type Text = typeof text_.$inferSelect
+
 
 export const word = sqliteTable('Word', {
   id: integer('id').primaryKey(),

@@ -1,5 +1,5 @@
 <script lang="ts">
-	export const compId: string  = "a";
+	export const compId: number | string  = "a";
 	export let text: string;
 	export let wordLoc: number[];
 </script>

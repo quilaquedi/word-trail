@@ -1,4 +1,9 @@
 
+export type Text = {
+    id: number | string,
+    rawForm: string,
+    textPos: number
+} []
 
 export type Context = {
 	compId: string | number,
@@ -7,7 +12,7 @@ export type Context = {
 };
 
 export type Comparisons = {
-	same: Context[],
-	similar: Context[],
+	same: Context[] ,
+	spelling: Context[],
 	meaning: Context[],
 };

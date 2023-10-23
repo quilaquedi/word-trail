@@ -5,6 +5,7 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { eq } from 'drizzle-orm';
 import Database from 'better-sqlite3';
 import { text_, word } from '$lib/server/db_schema';
+import type { Context, Comparisons, Text } from '$lib/types';
  
 const sqlite = new Database('data/wordtrail.db');
 const db: BetterSQLite3Database = drizzle(sqlite);
@@ -55,11 +56,7 @@ function loadText(textId: string) {
 		{ id: 'H', rawForm: 'second', textPos: 11 },
 		{ id: 'I', rawForm: 'word.', textPos: 12 },
 	];
-	let text: {
-		id: number | string,
-		rawForm: string,
-		textPos: number
-	} [];
+	let text: Text;
 	switch (textId) {
 		case 'x':
 			text = dummyText;
@@ -69,19 +66,17 @@ function loadText(textId: string) {
 			break;
 		default:
 			text=loadTextFromDb(Number(textId));
-	return text;
 	}
+	return text;
 }
 
-function loadContexts(wordId: string) {
-	type Context = {
-		compId: string | number,
-		text: string,
-		wordLoc: number[]
-	};
+function loadContexts(wordId: string | null) {
 	let context: Context;
-	let contexts: Context[];
+	let contexts: Comparisons;
 	switch (wordId) {
+		case null:
+			contexts = { same: [], spelling: [], meaning: [] };
+			break;
 		case 'B':
 			context = { compId: 'D3', text: 'sea is blue. Click on the second word.', wordLoc: [4, 6] };
 			contexts = { same: [context], spelling: [], meaning: [] };
@@ -98,7 +93,8 @@ function loadContexts(wordId: string) {
 
 export const load = (({ url }) => {
 	// Load text
-	const textId = url.pathname.split("/").at(-1).split("-")[0];
+	const slug = url.pathname.split("/").at(-1);
+	const textId = slug.split("-")[0];
 	const textTitle = loadTextTitle(textId);
 	const text = loadText(textId);
 
