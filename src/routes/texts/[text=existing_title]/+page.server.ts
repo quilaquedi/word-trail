@@ -50,7 +50,7 @@ function loadSimilarWordsFromDb(wordId: number) {
 	const asBaseResult = db
 		.select({
 			id: asBaseSq.id,
-			locStart: word.textPos,
+			StartLoc: word.textStartLoc,
 			rawForm: word.rawForm,
 			textId: word.textId
 		})
@@ -61,7 +61,7 @@ function loadSimilarWordsFromDb(wordId: number) {
 	const asCompResult = db
 		.select({
 			id: asCompSq.id,
-			locStart: word.textPos,
+			StartLoc: word.textStartLoc,
 			rawForm: word.rawForm,
 			textId: word.textId
 		})
@@ -92,8 +92,8 @@ function loadContextsFromDb(wordId: number) {
 			return {
 				wordId: word.id,
 				text: fullText.substring(
-					word.locStart - LEADING_CHAR_COUNT,
-					word.locStart + TRAILING_CHAR_COUNT
+					word.StartLoc - LEADING_CHAR_COUNT,
+					word.StartLoc + TRAILING_CHAR_COUNT
 				),
 				wordLoc: [LEADING_CHAR_COUNT, LEADING_CHAR_COUNT + word.rawForm.length]
 			};

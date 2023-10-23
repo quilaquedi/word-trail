@@ -12,7 +12,8 @@ export const word = sqliteTable('Word', {
 	rawForm: text('raw_form').notNull(),
 	normalForm: text('normal_form').notNull(),
 	textId: integer('text_id').references(() => text_.id),
-	textPos: integer('text_pos').notNull()
+	textPos: integer('text_pos').notNull(),
+	textStartLoc: integer('text_start_loc').notNull()
 });
 
 export const wordComparison = sqliteTable('WordComparison', {
