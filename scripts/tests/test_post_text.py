@@ -87,6 +87,7 @@ def test_post_first_text(test_db):
         "a",
     ]
     expected_text_poss = [0, 1, 2, 3, 4, 6, 7, 8, 9]
+    expected_text_start_locs = [0, 5, 8, 10, 19, 27, 32, 42, 44]
 
     stored_words = Word.select()
     for i, stored_word in enumerate(stored_words):
@@ -94,6 +95,7 @@ def test_post_first_text(test_db):
         assert stored_word.normal_form == expected_normal_forms[i]
         assert stored_word.text_id.id == stored_text.id
         assert stored_word.text_pos == expected_text_poss[i]
+        assert stored_word.text_start_loc == expected_text_start_locs[i]
 
     # Check correct word comparisons created
     BaseWord = Word.alias()

@@ -2,9 +2,8 @@ from loguru import logger
 from pathlib import Path
 
 from argparse import ArgumentParser
+from constants import DB_PATH
 from models import Text, Word, WordComparison, db
-
-DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
 
 
 def create_db(filepath: Path):

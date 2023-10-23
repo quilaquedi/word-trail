@@ -32,6 +32,7 @@ class Word(BaseModel):
     normal_form = CharField()
     text_id = ForeignKeyField(Text, backref="words")
     text_pos = IntegerField()
+    text_start_loc = IntegerField()
 
 
 class WordComparison(BaseModel):

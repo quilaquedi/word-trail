@@ -1,10 +1,9 @@
 from argparse import ArgumentParser
 from pathlib import Path
 
+from constants import DB_PATH
 from models import db, Text
 from loguru import logger
-
-DB_PATH = Path(__file__).parent / "data" / "wordtrail.db"
 
 parser = ArgumentParser(description="Removes a text from the corpus.")
 parser.add_argument("--title", type=str, required=True)

@@ -3,12 +3,14 @@ from pathlib import Path
 import json
 import re
 
+from constants import DB_PATH
 from models import db, Text, Word, WordComparison
 from loguru import logger
 from tqdm import tqdm
 
-DB_PATH = Path(__file__).parent.parent / "data" / "wordtrail.db"
-LANGUAGE_CODES_PATH = Path(__file__).parent.parent / "data" / "languages.json"
+LANGUAGE_CODES_PATH = (
+    Path(__file__).absolute().parent.parent / "data" / "languages.json"
+)
 INSERT_BATCH_SIZE = 75_000
 
 
@@ -61,11 +63,21 @@ text = Text(title=text_title, contents=text_contents, language=language)
 # Parse words in text
 cleaned_newlines = re.sub(pattern=r"\s*\n\s*", repl=" \n ", string=text_contents)
 raw_words_with_newlines = re.split(pattern=" +", string=cleaned_newlines)
-words = [
-    Word(raw_form=word, normal_form=clean_word(word), text_id=None, text_pos=i)
-    for i, word in enumerate(raw_words_with_newlines)
-    if word not in ["\n", ""]
-]
+words = []
+n_leading_chars = 0
+for i, word in enumerate(raw_words_with_newlines):
+    loc = text_contents.find(word, n_leading_chars)
+    if word not in ["\n", ""]:
+        new_word = Word(
+            raw_form=word,
+            normal_form=clean_word(word),
+            text_id=None,
+            text_pos=i,
+            text_start_loc=loc,
+        )
+        n_leading_chars = loc + len(word)
+        words.append(new_word)
+
 
 # Connect to the database
 db.init(args.database)
