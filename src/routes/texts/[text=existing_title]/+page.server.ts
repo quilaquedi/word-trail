@@ -4,8 +4,11 @@ import type { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { eq } from 'drizzle-orm';
 import Database from 'better-sqlite3';
-import { text_, word } from '$lib/server/db_schema';
-import type { Context, Comparisons, Text } from '$lib/types';
+import { text_, word, wordComparison } from '$lib/server/db_schema';
+import type { Context, Contexts, Text } from '$lib/types';
+
+const LEADING_CHAR_COUNT = 10;
+const TRAILING_CHAR_COUNT = 100;
 
 const sqlite = new Database('data/wordtrail.db');
 const db: BetterSQLite3Database = drizzle(sqlite);
@@ -15,7 +18,7 @@ function loadTextTitleFromDb(textId: number) {
 	return result['0'].title;
 }
 
-function loadTextFromDb(textId: number) {
+function loadTextWordsFromDb(textId: number) {
 	const result = db
 		.select({
 			id: word.id,
@@ -29,9 +32,76 @@ function loadTextFromDb(textId: number) {
 	return result;
 }
 
-// function loadContextsFromDb(wordId: number){
+function loadSimilarWordsFromDb(wordId: number) {
+	const asBaseSq = db
+		.select({
+			id: wordComparison.compId
+		})
+		.from(wordComparison)
+		.where(eq(wordComparison.baseId, wordId))
+		.as('asBaseSq');
+	const asCompSq = db
+		.select({
+			id: wordComparison.baseId
+		})
+		.from(wordComparison)
+		.where(eq(wordComparison.compId, wordId))
+		.as('asCompSq');
+	const asBaseResult = db
+		.select({
+			id: asBaseSq.id,
+			locStart: word.textPos,
+			rawForm: word.rawForm,
+			textId: word.textId
+		})
+		.from(asBaseSq)
+		.innerJoin(word, eq(asBaseSq.id, word.id))
+		.orderBy(word.id)
+		.all();
+	const asCompResult = db
+		.select({
+			id: asCompSq.id,
+			locStart: word.textPos,
+			rawForm: word.rawForm,
+			textId: word.textId
+		})
+		.from(asCompSq)
+		.innerJoin(word, eq(asCompSq.id, word.id))
+		.orderBy(word.id)
+		.all();
+	return [...asBaseResult, ...asCompResult];
+}
 
-// }
+function loadTextFromDb(textId: number) {
+	const result = db
+		.select({ contents: text_.contents })
+		.from(text_)
+		.where(eq(text_.id, textId))
+		.all();
+	return result['0'].contents;
+}
+
+function loadContextsFromDb(wordId: number) {
+	const similarWords = loadSimilarWordsFromDb(wordId);
+	const relevantTextIds = new Set(similarWords.map((x) => x.textId));
+	const contexts: Context[] = [];
+	relevantTextIds.forEach((textId) => {
+		const fullText = loadTextFromDb(textId);
+		const words = similarWords.filter((word) => word.textId == textId);
+		const newContexts = words.map((word) => {
+			return {
+				wordId: word.id,
+				text: fullText.substring(
+					word.locStart - LEADING_CHAR_COUNT,
+					word.locStart + TRAILING_CHAR_COUNT
+				),
+				wordLoc: [LEADING_CHAR_COUNT, LEADING_CHAR_COUNT + word.rawForm.length]
+			};
+		});
+		contexts.push(...newContexts);
+	});
+	return contexts;
+}
 
 function loadTextTitle(textId: string) {
 	let title: string;
@@ -70,32 +140,32 @@ function loadText(textId: string) {
 			text = dummyText;
 			break;
 		default:
-			text = loadTextFromDb(Number(textId));
+			text = loadTextWordsFromDb(Number(textId));
 	}
 	return text;
 }
 
 function loadContexts(wordId: string | null) {
 	let context: Context;
-	let contexts: Comparisons;
+	let contexts: Contexts;
 	switch (wordId) {
 		case null:
 			contexts = { same: [], spelling: [], meaning: [] };
 			break;
 		case 'B':
-			context = { compId: 'D3', text: 'sea is blue. Click on the second word.', wordLoc: [4, 6] };
+			context = { wordId: 'D3', text: 'sea is blue. Click on the second word.', wordLoc: [4, 6] };
 			contexts = { same: [context], spelling: [], meaning: [] };
 			break;
 		case 'D3':
 			context = {
-				compId: 'B',
+				wordId: 'B',
 				text: 'This is a text. That sea is blue. Click on the second word.',
 				wordLoc: [5, 7]
 			};
 			contexts = { same: [context], spelling: [], meaning: [] };
 			break;
 		default:
-			contexts = { same: [], spelling: [], meaning: [] };
+			contexts = { same: loadContextsFromDb(Number(wordId)), spelling: [], meaning: [] };
 	}
 	return contexts;
 }

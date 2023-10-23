@@ -5,12 +5,12 @@ export type Text = {
 }[];
 
 export type Context = {
-	compId: string | number;
+	wordId: string | number;
 	text: string;
 	wordLoc: number[];
 };
 
-export type Comparisons = {
+export type Contexts = {
 	same: Context[];
 	spelling: Context[];
 	meaning: Context[];
