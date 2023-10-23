@@ -49,14 +49,14 @@
 	<div class="grid gap-8">
 		{#each similarityTypes as similarityType}
 			<div aria-label={similarityType.name + ' Pane'} class="rounded bg-neutral overflow-y-auto">
-				<table class="table table-pin-rows">
+				<table class="table table-pin-rows w-full">
 					<thead class="text-accent uppercase">
 						<tr><th class="px-2 py-1 font-semibold">{similarityType.heading}</th></tr>
 					</thead>
 					<tbody class="text-primary text-xs">
 						{#each data.contexts[similarityType.id] as context}
 							<tr class="hover"
-								><td class="p-2">
+								><td class="p-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-0">
 									<RelatedContext {...context} />
 								</td></tr
 							>
