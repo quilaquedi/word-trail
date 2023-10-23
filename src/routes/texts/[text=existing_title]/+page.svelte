@@ -39,11 +39,6 @@
 	</div>
 
 	<div class="relative">
-		<button
-			class="btn btn-base-200 btn-xs border-primary rounded-sm no-animation text-primary my-2 absolute bottom-0"
-		>
-			Lookup
-		</button>
 	</div>
 
 	<div class="grid gap-8">
