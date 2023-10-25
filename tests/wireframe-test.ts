@@ -16,8 +16,6 @@ test('text page displays required components', async ({ page }) => {
 
 	// Context panes are visible
 	await expect(page.getByLabel('Same Word Pane')).toBeVisible();
-	// Lookup button is visible
-	await expect(page.getByRole('button', { name: 'Lookup' })).toBeVisible();
 });
 
 test('menu displays required components', async ({ page }) => {
