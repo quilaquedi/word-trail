@@ -171,7 +171,7 @@ async function loadContexts(wordId: string | null, db) {
 }
 
 export const load = (({ url, params, locals }) => {
-	const db = locals;
+	const db = locals.db;
 	// Load text
 	const textId = params.text.split('-')[0];
 	const textTitle = loadTextTitle(textId, db);

@@ -34,10 +34,8 @@ async function loadTextInfos(db) {
 }
 
 export const load = (({ locals }) => {
-	const db = locals;
-
 	// Load list of available texts, for menu
 	return {
-		textInfos: loadTextInfos(db)
+		textInfos: loadTextInfos(locals.db)
 	};
 }) satisfies PageServerLoad;
