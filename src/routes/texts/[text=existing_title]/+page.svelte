@@ -48,19 +48,23 @@
 						<tr><th class="px-2 py-1 font-semibold">{similarityType.heading}</th></tr>
 					</thead>
 					<tbody class="text-primary text-xs">
-						{#await data.contexts}
-							<tr><td>Loading...</td></tr>
-						{:then contexts}
-							{#each contexts[similarityType.id] as context}
+						{#if data.contexts === undefined}
+							<p />
+						{:else if data.contexts[similarityType.id].length === 0}
+							<td
+								><div class="cell">
+									<p class="text-base-300 text-center italic align-middle">No matches found.</p>
+								</div></td
+							>
+						{:else}
+							{#each data.contexts[similarityType.id] as context}
 								<tr class="hover"
 									><td class="p-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-0">
 										<RelatedContext {...context} />
 									</td></tr
 								>
 							{/each}
-						{:catch error}
-							<tr><td>{error.message}</td></tr>
-						{/await}
+						{/if}
 					</tbody>
 				</table>
 			</div>

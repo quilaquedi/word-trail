@@ -8,7 +8,10 @@ const LEADING_CHAR_COUNT = 10;
 const TRAILING_CHAR_COUNT = 100;
 
 async function loadTutorialIdFromDb(textId: number, db) {
-	const result = await db.select({ id: text_.title }).from(text_).where(eq(text_.title, "Tutorial"));
+	const result = await db
+		.select({ id: text_.title })
+		.from(text_)
+		.where(eq(text_.title, 'Tutorial'));
 	return result['0'].id;
 }
 
@@ -142,11 +145,11 @@ async function loadText(textId: string, db) {
 
 async function loadContexts(wordId: string | null, db) {
 	let context: Context;
-	let contexts: Contexts;
+	let contexts: Contexts | undefined;
 	let sameContexts: Context[];
 	switch (wordId) {
 		case null:
-			contexts = { same: [], spelling: [], meaning: [] };
+			contexts = undefined;
 			break;
 		case 'B':
 			context = { wordId: 'D3', text: 'sea is blue. Click on the second word.', wordLoc: [4, 6] };

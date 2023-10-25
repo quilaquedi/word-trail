@@ -17,8 +17,8 @@ export type Contexts = {
 };
 
 export type TextInfo = {
-	id: number,
-	title: string,
-	language: string,
-	slug: string
-}
+	id: number;
+	title: string;
+	language: string;
+	slug: string;
+};

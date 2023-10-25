@@ -3,7 +3,7 @@
 	import type { TextInfo } from '$lib/types';
 	export let textInfos: TextInfo[];
 
-	const languages = ["English", "Deutsch"];
+	const languages = ['English', 'Deutsch'];
 </script>
 
 <div class="drawer">
@@ -22,19 +22,19 @@
 			<header aria-label="app name">WordTrail</header>
 			<li>
 				{#each languages as language}
-				<details open>
-					<summary>{language}</summary>
-					<ul>
-						{#each textInfos.filter((ti) => ti.language == language) as textInfo}
-							<li>
-								<a
-									on:click={() => document.getElementById('close-menu').click()}
-									href={"/texts/"+textInfo.slug}>{textInfo.title}</a
-								>
-							</li>
-						{/each}
-					</ul>
-				</details>					
+					<details open>
+						<summary>{language}</summary>
+						<ul>
+							{#each textInfos.filter((ti) => ti.language == language) as textInfo}
+								<li>
+									<a
+										on:click={() => document.getElementById('close-menu').click()}
+										href={'/texts/' + textInfo.slug}>{textInfo.title}</a
+									>
+								</li>
+							{/each}
+						</ul>
+					</details>
 				{/each}
 			</li>
 		</div>
