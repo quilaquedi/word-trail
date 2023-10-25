@@ -4,14 +4,6 @@ This directory contains scripts to generate data for the WordTrail app.
 
 Source texts are available in the `../data` directory.
 
-To recreate the dev database, follow steps for installation, and then run:
-
-```[bash]
-    bash recreate-db.sh --local
-```
-
-(If progress shows 1_000_00 it/s, the job will take ~90s in total.)
-
 ## Installation
 
 Developed with Python 3.8 and PostgreSQL 12.16 on Ubuntu 20.04.
@@ -46,6 +38,20 @@ Install pre-commit hooks: `pre-commit install`
 ## Usage
 
 All stores are currently tables in a local PostgreSQL database.
+
+To recreate the dev database, follow steps for installation, and then run:
+
+```[bash]
+    bash recreate-db.sh --local
+```
+
+(If progress shows 1_000_00 it/s, the job will take ~90s in total.)
+
+To recreate the prod database, run:
+
+```[bash]
+    bash recreate-db.sh --prod
+```
 
 ### init-stores
 
