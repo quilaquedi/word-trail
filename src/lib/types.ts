@@ -15,3 +15,10 @@ export type Contexts = {
 	spelling: Context[];
 	meaning: Context[];
 };
+
+export type TextInfo = {
+	id: number,
+	title: string,
+	language: string,
+	slug: string
+}

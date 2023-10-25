@@ -21,6 +21,7 @@ Pull vercel environment variables: `vercel env pull .env.development.local`.
 Set up databases: see `scripts/README.md`.
 
 Add the following environment variables using the vercel UI:
+
 ```
     LOCAL_POSTGRES_USER=""
     LOCAL_POSTGRES_PASSWORD=""

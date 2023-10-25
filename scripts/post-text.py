@@ -9,7 +9,7 @@ from loguru import logger
 from tqdm import tqdm
 
 LANGUAGE_CODES_PATH = (
-    Path(__file__).absolute().parent.parent / "data" / "languages.json"
+    Path(__file__).absolute().parent.parent / "src/lib/server" / "languages.json"
 )
 INSERT_BATCH_SIZE = 75_000
 
@@ -54,7 +54,7 @@ language = args.language.lower()
 
 valid_codes = []
 with open(LANGUAGE_CODES_PATH) as f:
-    valid_codes = [json.loads(line)["Code"] for line in f]
+    valid_codes = [lang["Code"] for lang in json.load(f)]
 
 if language not in valid_codes:
     raise ValueError("Language must be a valid ISO 639-I code.")

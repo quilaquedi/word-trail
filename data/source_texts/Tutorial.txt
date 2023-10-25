@@ -1,0 +1,12 @@
+Welcome to WordTrail - a tool for language learners.
+
+Seen a word that looks familiar, but not quite sure? Here you can check for other places it appears in your booklist.
+
+Try it out: click on a word that appears more than once in this text (for example, this one: **Welcome**).
+
+Get started: select a text from the menu. (Open the menu by clicking the orange block on the lefthand side.)
+
+Features coming soon:
+- View words with similar spellings or meanings, not just exact matches
+- Bookmark reading progress
+- Lookup words in an online dictionary

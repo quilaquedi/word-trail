@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 python init-stores.py "$1"
-python post-text.py "$1" --filepath data/source_texts/Immensee.txt --language de
+python post-text.py "$1" --filepath ../data/source_texts/Immensee.txt --language de
 
 if [[ ! "$1" = "--vercel" ]]; then
     cp .db.config ../.env

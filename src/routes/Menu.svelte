@@ -1,5 +1,9 @@
-<script>
+<script lang="ts">
 	import { tutorial_route } from './titles';
+	import type { TextInfo } from '$lib/types';
+	export let textInfos: TextInfo[];
+
+	const languages = ["English", "Deutsch"];
 </script>
 
 <div class="drawer">
@@ -17,28 +21,21 @@
 		<div class="menu p-4 w-80 min-h-full bg-accent">
 			<header aria-label="app name">WordTrail</header>
 			<li>
+				{#each languages as language}
 				<details open>
-					<summary>Deutsch</summary>
+					<summary>{language}</summary>
 					<ul>
-						<li>
-							<a
-								on:click={() => document.getElementById('close-menu').click()}
-								href="/texts/1-immensee">Immensee</a
-							>
-						</li>
+						{#each textInfos.filter((ti) => ti.language == language) as textInfo}
+							<li>
+								<a
+									on:click={() => document.getElementById('close-menu').click()}
+									href={"/texts/"+textInfo.slug}>{textInfo.title}</a
+								>
+							</li>
+						{/each}
 					</ul>
-				</details>
-				<details open>
-					<summary>English</summary>
-					<ul>
-						<li>
-							<a
-								on:click={() => document.getElementById('close-menu').click()}
-								href={tutorial_route}>Tutorial</a
-							>
-						</li>
-					</ul>
-				</details>
+				</details>					
+				{/each}
 			</li>
 		</div>
 	</div>

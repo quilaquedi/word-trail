@@ -11,3 +11,4 @@ else
 fi
 
 bash changes/v0-0-1.sh "$ENV_PARAM"
+bash changes/v0-0-3.sh "$ENV_PARAM"
