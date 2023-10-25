@@ -1,25 +1,19 @@
-import type { PageServerLoad } from './$types';
-
-import type { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
 import { eq } from 'drizzle-orm';
-import Database from 'better-sqlite3';
 import { text_, word, wordComparison } from '$lib/server/db_schema';
+
+import type { PageServerLoad } from './$types';
 import type { Context, Contexts, Text } from '$lib/types';
 
 const LEADING_CHAR_COUNT = 10;
 const TRAILING_CHAR_COUNT = 100;
 
-const sqlite = new Database('data/wordtrail.db');
-const db: BetterSQLite3Database = drizzle(sqlite);
-
-function loadTextTitleFromDb(textId: number) {
-	const result = db.select({ title: text_.title }).from(text_).where(eq(text_.id, textId)).all();
+async function loadTextTitleFromDb(textId: number, db) {
+	const result = await db.select({ title: text_.title }).from(text_).where(eq(text_.id, textId));
 	return result['0'].title;
 }
 
-function loadTextWordsFromDb(textId: number) {
-	const result = db
+async function loadTextWordsFromDb(textId: number, db) {
+	const result = await db
 		.select({
 			id: word.id,
 			rawForm: word.rawForm,
@@ -27,12 +21,11 @@ function loadTextWordsFromDb(textId: number) {
 		})
 		.from(word)
 		.where(eq(word.textId, textId))
-		.orderBy(word.textPos)
-		.all();
+		.orderBy(word.textPos);
 	return result;
 }
 
-function loadSimilarWordsFromDb(wordId: number) {
+async function loadSimilarWordsFromDb(wordId: number, db) {
 	const asBaseSq = db
 		.select({
 			id: wordComparison.compId
@@ -47,7 +40,7 @@ function loadSimilarWordsFromDb(wordId: number) {
 		.from(wordComparison)
 		.where(eq(wordComparison.compId, wordId))
 		.as('asCompSq');
-	const asBaseResult = db
+	const asBaseResult = await db
 		.select({
 			id: asBaseSq.id,
 			StartLoc: word.textStartLoc,
@@ -56,9 +49,8 @@ function loadSimilarWordsFromDb(wordId: number) {
 		})
 		.from(asBaseSq)
 		.innerJoin(word, eq(asBaseSq.id, word.id))
-		.orderBy(word.id)
-		.all();
-	const asCompResult = db
+		.orderBy(word.id);
+	const asCompResult = await db
 		.select({
 			id: asCompSq.id,
 			StartLoc: word.textStartLoc,
@@ -67,26 +59,24 @@ function loadSimilarWordsFromDb(wordId: number) {
 		})
 		.from(asCompSq)
 		.innerJoin(word, eq(asCompSq.id, word.id))
-		.orderBy(word.id)
-		.all();
+		.orderBy(word.id);
 	return [...asBaseResult, ...asCompResult];
 }
 
-function loadTextFromDb(textId: number) {
-	const result = db
+async function loadTextFromDb(textId: number, db) {
+	const result = await db
 		.select({ contents: text_.contents })
 		.from(text_)
-		.where(eq(text_.id, textId))
-		.all();
+		.where(eq(text_.id, textId));
 	return result['0'].contents;
 }
 
-function loadContextsFromDb(wordId: number) {
-	const similarWords = loadSimilarWordsFromDb(wordId);
+async function loadContextsFromDb(wordId: number, db) {
+	const similarWords = await loadSimilarWordsFromDb(wordId, db);
 	const relevantTextIds = new Set(similarWords.map((x) => x.textId));
 	const contexts: Context[] = [];
-	relevantTextIds.forEach((textId) => {
-		const fullText = loadTextFromDb(textId);
+	relevantTextIds.forEach(async (textId) => {
+		const fullText = await loadTextFromDb(textId, db);
 		const words = similarWords.filter((word) => word.textId == textId);
 		const newContexts = words.map((word) => {
 			return {
@@ -103,19 +93,19 @@ function loadContextsFromDb(wordId: number) {
 	return contexts;
 }
 
-function loadTextTitle(textId: string) {
+async function loadTextTitle(textId: string, db) {
 	let title: string;
 	switch (textId) {
 		case 'x':
 			title = 'Tutorial';
 			break;
 		default:
-			title = loadTextTitleFromDb(Number(textId));
+			title = await loadTextTitleFromDb(Number(textId), db);
 	}
 	return title;
 }
 
-function loadText(textId: string) {
+async function loadText(textId: string, db) {
 	const dummyText = [
 		{ id: 'A', rawForm: 'This', textPos: 0 },
 		{ id: 'B', rawForm: 'is', textPos: 1 },
@@ -140,14 +130,15 @@ function loadText(textId: string) {
 			text = dummyText;
 			break;
 		default:
-			text = loadTextWordsFromDb(Number(textId));
+			text = await loadTextWordsFromDb(Number(textId), db);
 	}
 	return text;
 }
 
-function loadContexts(wordId: string | null) {
+async function loadContexts(wordId: string | null, db) {
 	let context: Context;
 	let contexts: Contexts;
+	let sameContexts: Context[];
 	switch (wordId) {
 		case null:
 			contexts = { same: [], spelling: [], meaning: [] };
@@ -165,20 +156,22 @@ function loadContexts(wordId: string | null) {
 			contexts = { same: [context], spelling: [], meaning: [] };
 			break;
 		default:
-			contexts = { same: loadContextsFromDb(Number(wordId)), spelling: [], meaning: [] };
+			sameContexts = await loadContextsFromDb(Number(wordId), db);
+			contexts = { same: sameContexts, spelling: [], meaning: [] };
 	}
 	return contexts;
 }
 
-export const load = (({ url, params }) => {
+export const load = (({ url, params, locals }) => {
+	const db = locals;
 	// Load text
 	const textId = params.text.split('-')[0];
-	const textTitle = loadTextTitle(textId);
-	const text = loadText(textId);
+	const textTitle = loadTextTitle(textId, db);
+	const text = loadText(textId, db);
 
 	// Load contexts for queried word
 	const wordId = url.searchParams.get('word');
-	const contexts = loadContexts(wordId);
+	const contexts = loadContexts(wordId, db);
 	return {
 		contexts: contexts,
 		textTitle: textTitle,

@@ -1,20 +1,31 @@
 from loguru import logger
-from pathlib import Path
 
 from argparse import ArgumentParser
-from constants import DB_PATH
+from dbconfig import (
+    load_config_from_args,
+    init_db,
+    PsycopgDBConfig,
+)
 from models import Text, Word, WordComparison, db
 
 
-def create_db(filepath: Path):
-    db.init(filepath)
+def create_tables(dbconfig: PsycopgDBConfig) -> None:
+    init_db(db, dbconfig)
     with db:
         db.create_tables([Text, Word, WordComparison])
-        logger.info(f"Tables created at {filepath}.")
+        logger.info(f"Tables created or previously existed at {dbconfig['dbname']}.")
 
 
 parser = ArgumentParser(description="Create DB tables.")
-parser.add_argument("--db_path", type=Path, default=DB_PATH)
-args = parser.parse_args()
+parser.add_argument(
+    "--vercel", action="store_true", help="Use Vercel database credentials"
+)
+parser.add_argument(
+    "--database", type=str, help="(Ignored if --vercel option is set)"
+)
+args, _ = parser.parse_known_args()
 
-create_db(args.db_path)
+dbconfig = load_config_from_args(args)
+
+
+create_tables(dbconfig)

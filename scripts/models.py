@@ -1,5 +1,5 @@
 from peewee import (
-    SqliteDatabase,
+    PostgresqlDatabase,
     Model,
     AutoField,
     CharField,
@@ -11,7 +11,7 @@ from peewee import (
 )
 
 
-db = SqliteDatabase(None)
+db = PostgresqlDatabase(None)
 
 
 class BaseModel(Model):

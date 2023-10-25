@@ -7,13 +7,35 @@ Source texts are available in the `../data` directory.
 To recreate the dev database, follow steps for installation, and then run:
 
 ```[bash]
-    python init-stores.py
-    python post-text.py --filepath data/source_texts/Immensee.txt --language de
+    bash recreate-db.sh --local
 ```
+
+(If progress shows 1_000_00 it/s, the job will take ~90s in total.)
 
 ## Installation
 
-Developed with Python 3.8 on Ubuntu 20.04.
+Developed with Python 3.8 and PostgreSQL 12.16 on Ubuntu 20.04.
+To install, set up a local database, then install Python dependencies.
+
+### Set up a local PostgreSQL database
+
+Install PostgreSQL (see [PostgreSQL docs](https://www.postgresql.org/docs/current/admin.html) or [instructions for WSL2](https://learn.microsoft.com/en-us/windows/wsl/tutorials/wsl-database#install-postgresql)).
+
+Start your PostgreSQL server on localhost. (On WSL2: `sudo service postgresql start`)
+
+Start a PostgreSQL session. (On WSL2, with PostgreSQL user `postgres`: `sudo -u postgres psql`)
+
+In the PostgreSQL session:
+
+- Create the database role `wt_script` and set a password of choice: `CREATE ROLE wt_script PASSWORD 'tsrpprst' NOSUPERUSER CREATEDB CREATEROLE LOGIN;`.
+
+- Create dev database: `CREATE DATABASE wordtraildb WITH OWNER=wt_script;`
+
+- End the session: `quit`
+
+Create a config file `.db.config` in this directory with the database role and password. See `.db.config.example` for an example.
+
+### Install Python dependencies
 
 Create and activate a virtual environment: `python -m venv .env && source .env/bin/activate`
 
@@ -23,7 +45,7 @@ Install pre-commit hooks: `pre-commit install`
 
 ## Usage
 
-All stores are currently tables in a SQLite database, but may connect to Vercel Postgres DBs in the future.
+All stores are currently tables in a local PostgreSQL database.
 
 ### init-stores
 
@@ -31,7 +53,7 @@ All stores are currently tables in a SQLite database, but may connect to Vercel 
 python init-stores.py
 ```
 
-This script will create `texts`, `words`, `distances`, and `contexts` stores as tables in the SQLite database `data/wordtrail.db`.
+This script will create `texts`, `words`, `distances`, and `contexts` stores as tables in the database `wordtraildb`.
 
 ### post-text
 

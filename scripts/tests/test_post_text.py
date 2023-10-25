@@ -3,30 +3,16 @@ import subprocess
 
 from pathlib import Path
 from ..models import db, Text, Word, WordComparison
+from ..dbconfig import init_db
 
 TEST_DIR = Path(__file__).parent
 
 
-@pytest.fixture(scope="module")
-def setup_test_db():
-    # Create test sqlite db
-    db_path = TEST_DIR / "data" / "wordtrail.db"
-    args = ["python", TEST_DIR.parent / "init-stores.py", "--db_path", db_path]
-    subprocess.run(args, check=True)
-    # Initialize test db
-    db.init(db_path)
-
-    yield db_path
-
-    # Teardown test db
-    subprocess.run(["rm", db_path], check=True)
-
-
 @pytest.fixture(scope="function")
-def test_db(setup_test_db):
+def test_dbconfig(setup_test_db):
     yield setup_test_db
 
-    db.init(setup_test_db)
+    init_db(db, setup_test_db)
     db.connect()
 
     # Delete any data inserted during test execution
@@ -37,7 +23,7 @@ def test_db(setup_test_db):
     db.close()
 
 
-def test_post_first_text(test_db):
+def test_post_first_text(test_dbconfig):
     # Run command
     args = [
         "python",
@@ -47,11 +33,11 @@ def test_post_first_text(test_db):
         "--language",
         "EN",
         "--database",
-        test_db,
+        test_dbconfig["dbname"],
     ]
     subprocess.run(args, check=True)
 
-    db.init(test_db)
+    init_db(db, test_dbconfig)
     db.connect()
 
     # Check correct text entry created
@@ -114,7 +100,7 @@ def test_post_first_text(test_db):
     db.close()
 
 
-def test_post_additional_text(test_db):
+def test_post_additional_text(test_dbconfig):
     # Run commands
     args_1 = [
         "python",
@@ -124,7 +110,7 @@ def test_post_additional_text(test_db):
         "--language",
         "EN",
         "--database",
-        test_db,
+        test_dbconfig["dbname"],
     ]
     subprocess.run(args_1, check=True)
     args_2 = [
@@ -135,11 +121,11 @@ def test_post_additional_text(test_db):
         "--language",
         "EN",
         "--database",
-        test_db,
+        test_dbconfig["dbname"],
     ]
     subprocess.run(args_2, check=True)
 
-    db.init(test_db)
+    init_db(db, test_dbconfig)
     db.connect()
 
     # Check correct word comparisons created
@@ -158,7 +144,7 @@ def test_post_additional_text(test_db):
         assert comparison.comp_word.text_pos == 1
 
 
-def test_when_invalid_language_code(test_db):
+def test_when_invalid_language_code(test_dbconfig):
     # Run command
     args = [
         "python",
@@ -168,7 +154,7 @@ def test_when_invalid_language_code(test_db):
         "--language",
         "ER",
         "--database",
-        test_db,
+        test_dbconfig["dbname"],
     ]
     with pytest.raises(subprocess.CalledProcessError):
         subprocess.run(args, check=True)

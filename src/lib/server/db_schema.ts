@@ -1,13 +1,13 @@
-import { text, integer, sqliteTable } from 'drizzle-orm/sqlite-core';
+import { text, integer, boolean, char, pgTable } from 'drizzle-orm/pg-core';
 
-export const text_ = sqliteTable('Text', {
+export const text_ = pgTable('text', {
 	id: integer('id').primaryKey(),
 	title: text('title').notNull(),
 	contents: text('contents').notNull(),
-	language: text('language').notNull()
+	language: char('language', { length: 2 }).notNull()
 });
 
-export const word = sqliteTable('Word', {
+export const word = pgTable('word', {
 	id: integer('id').primaryKey(),
 	rawForm: text('raw_form').notNull(),
 	normalForm: text('normal_form').notNull(),
@@ -16,8 +16,8 @@ export const word = sqliteTable('Word', {
 	textStartLoc: integer('text_start_loc').notNull()
 });
 
-export const wordComparison = sqliteTable('WordComparison', {
+export const wordComparison = pgTable('wordcomparison', {
 	baseId: integer('base_id').references(() => word.id),
 	compId: integer('comp_id').references(() => word.id),
-	isMatch: integer('is_match', { mode: 'boolean' })
+	isMatch: boolean('is_match')
 });

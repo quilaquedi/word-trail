@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import type { Comparisons } from '$lib/types';
+	import type { Contexts } from '$lib/types';
 	import RelatedContext from './RelatedContext.svelte';
 	import Word from './Word.svelte';
 
 	export let data: PageData;
 
 	type SimilarityType = {
-		id: keyof Comparisons;
+		id: keyof Contexts;
 		name: string;
 		heading: string;
 	};
@@ -38,8 +38,7 @@
 		<cite aria-label="Text Title" class="text-sm text-accent font-light">{data.textTitle}</cite>
 	</div>
 
-	<div class="relative">
-	</div>
+	<div class="relative" />
 
 	<div class="grid gap-8">
 		{#each similarityTypes as similarityType}
@@ -49,13 +48,19 @@
 						<tr><th class="px-2 py-1 font-semibold">{similarityType.heading}</th></tr>
 					</thead>
 					<tbody class="text-primary text-xs">
-						{#each data.contexts[similarityType.id] as context}
-							<tr class="hover"
-								><td class="p-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-0">
-									<RelatedContext {...context} />
-								</td></tr
-							>
-						{/each}
+						{#await data.contexts}
+							<tr><td>Loading...</td></tr>
+						{:then contexts}
+							{#each contexts[similarityType.id] as context}
+								<tr class="hover"
+									><td class="p-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-0">
+										<RelatedContext {...context} />
+									</td></tr
+								>
+							{/each}
+						{:catch error}
+							<tr><td>{error.message}</td></tr>
+						{/await}
 					</tbody>
 				</table>
 			</div>

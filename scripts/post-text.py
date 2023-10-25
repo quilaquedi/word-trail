@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 import re
 
-from constants import DB_PATH
+from dbconfig import init_db, load_config_from_args
 from models import db, Text, Word, WordComparison
 from loguru import logger
 from tqdm import tqdm
@@ -38,8 +38,16 @@ parser = ArgumentParser(description="Adds a text to the corpus.")
 parser.add_argument("--title", type=str, required=False)
 parser.add_argument("--filepath", type=Path, required=True)
 parser.add_argument("--language", type=str, required=True)
-parser.add_argument("--database", type=Path, default=DB_PATH)
-args = parser.parse_args()
+parser.add_argument(
+    "--vercel", action="store_true", help="Use Vercel database credentials"
+)
+parser.add_argument(
+    "--database",
+    type=str,
+    help="(Ignored if --vercel option is set)",
+)
+args, _ = parser.parse_known_args()
+dbconfig = load_config_from_args(args)
 
 # Check language is a valid ISO 639-1 code
 language = args.language.lower()
@@ -78,9 +86,8 @@ for i, word in enumerate(raw_words_with_newlines):
         n_leading_chars = loc + len(word)
         words.append(new_word)
 
-
 # Connect to the database
-db.init(args.database)
+init_db(db, dbconfig)
 db.connect()
 
 # Add text to the database
