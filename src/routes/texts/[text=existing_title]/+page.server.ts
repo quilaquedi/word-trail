@@ -7,6 +7,11 @@ import type { Context, Contexts, Text } from '$lib/types';
 const LEADING_CHAR_COUNT = 10;
 const TRAILING_CHAR_COUNT = 100;
 
+async function loadTutorialIdFromDb(textId: number, db) {
+	const result = await db.select({ id: text_.title }).from(text_).where(eq(text_.title, "Tutorial"));
+	return result['0'].id;
+}
+
 async function loadTextTitleFromDb(textId: number, db) {
 	const result = await db.select({ title: text_.title }).from(text_).where(eq(text_.id, textId));
 	return result['0'].title;
@@ -75,7 +80,7 @@ async function loadContextsFromDb(wordId: number, db) {
 	const similarWords = await loadSimilarWordsFromDb(wordId, db);
 	const relevantTextIds = new Set(similarWords.map((x) => x.textId));
 	const contexts: Context[] = [];
-	relevantTextIds.forEach(async (textId) => {
+	for await (const textId of relevantTextIds) {
 		const fullText = await loadTextFromDb(textId, db);
 		const words = similarWords.filter((word) => word.textId == textId);
 		const newContexts = words.map((word) => {
@@ -89,7 +94,7 @@ async function loadContextsFromDb(wordId: number, db) {
 			};
 		});
 		contexts.push(...newContexts);
-	});
+	}
 	return contexts;
 }
 
