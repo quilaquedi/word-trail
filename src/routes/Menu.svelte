@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { tutorial_route } from './titles';
 	import type { TextInfo } from '$lib/types';
 	export let textInfos: TextInfo[];
 
