@@ -1,6 +1,6 @@
 # word-trail
 
-This app currently deploys to Vercel. This has implications for how to install and build the application.
+This app currently deploys to [Vercel](https://vercel.com/docs), with a database hosted on [Neon](https://neon.tech/docs). This has implications for how to install and build the application.
 
 ## Installing
 
@@ -10,15 +10,15 @@ Before beginning, ensure you are using Node 18 (required for Vercel): if using n
 
 Then install dependencies with `npm install` (or `pnpm install` or `yarn`).
 
-Deploy to vercel, using vercel docs and SvelteKit template. This will create a vercel project.
+Deploy to Vercel, using Vercel docs and SvelteKit template. This will create a vercel project.
 
-Link this development folder to vercel: `vercel  link`
+Link this development folder to Vercel: `vercel  link`
 
-Create a vercel postgres db, using vercel docs, and connect to created vercel project.
+Create a Neon db, using Neon docs, and connect to vercel project, using [Neon-Vercel Integration](https://vercel.com/integrations/neon). If you check the optiono to create a development branch, make sure to set it as the primary branch in your Neon dashboard.
 
-Pull vercel environment variables: `vercel env pull .env.development.local`.
+Pull vercel environment variables and save in `.env.local`: `vercel env pull`
 
-Set up databases: see `scripts/README.md`.
+Set up local database and load data into databases: see `scripts/README.md`.
 
 Add the following environment variables using the vercel UI:
 
@@ -29,10 +29,7 @@ Add the following environment variables using the vercel UI:
     LOCAL_POSTGRES_HOST=""
 ```
 
-If you would like to run playwright tests,
-
-1. Install playwright browsers with `npx playwright install`.
-2. Install playwright dependencies: `sudo npx playwright install-deps`. If this command does not work, install the packages listed when you run `npm run test`.
+If you would like to run playwright tests, install playwright dependencies: `sudo npx playwright install-deps`. If this command does not work, install the packages listed when you run `npm run test`.
 
 ## Developing
 

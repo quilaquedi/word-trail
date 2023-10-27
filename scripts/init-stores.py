@@ -18,10 +18,14 @@ def create_tables(dbconfig: PsycopgDBConfig) -> None:
 
 parser = ArgumentParser(description="Create DB tables.")
 parser.add_argument(
+    "--database", type=str, help="(Ignored if --vercel or --neon option is set)"
+)
+remote_group = parser.add_mutually_exclusive_group()
+remote_group.add_argument(
     "--vercel", action="store_true", help="Use Vercel database credentials"
 )
-parser.add_argument(
-    "--database", type=str, help="(Ignored if --vercel option is set)"
+remote_group.add_argument(
+    "--neon", action="store_true", help="Use Neon database credentials"
 )
 args, _ = parser.parse_known_args()
 

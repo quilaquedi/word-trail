@@ -4,7 +4,7 @@
 if [ "$1" = "--local" ]; then
     ENV_PARAM=0
 elif [ "$1" = "--prod" ]; then
-    ENV_PARAM="--vercel"
+    ENV_PARAM="--neon"
 else
     echo "$0: A single option (--local or --prod) is required."
     exit 2

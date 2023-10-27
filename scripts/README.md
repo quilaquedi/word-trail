@@ -47,7 +47,7 @@ To recreate the dev database, follow steps for installation, and then run:
 
 (If progress shows 1_000_00 it/s, the job will take ~90s in total.)
 
-To recreate the prod database, run:
+To recreate the prod database (requires setting up Vercel-Neon integration as specified in main project README), run:
 
 ```[bash]
     bash recreate-db.sh --prod
@@ -59,7 +59,7 @@ To recreate the prod database, run:
 python init-stores.py
 ```
 
-This script will create `texts`, `words`, `distances`, and `contexts` stores as tables in the database `wordtraildb`.
+This script will create `texts`, `words`, `distances`, and `contexts` stores as tables in the database.
 
 ### post-text
 

@@ -1,4 +1,4 @@
-from ..dbconfig import read_local_config, read_vercel_config
+from ..dbconfig import read_local_config, read_vercel_config, read_neon_config
 from pathlib import Path
 
 TEST_DIR = Path(__file__).parent
@@ -16,5 +16,10 @@ def test_read_local_config():
 
 
 def test_read_vercel_config():
-    read_vercel_config()
-    assert True
+    actual_config = read_vercel_config()
+    assert actual_config["user"] == "default"
+
+
+def test_read_neon_config():
+    actual_config = read_neon_config()
+    assert actual_config["user"] == "quilaquedi"
