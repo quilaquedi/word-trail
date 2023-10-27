@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 // Test Routes
 
 test('tutorial page exists', async ({ page }) => {
-	const response = await page.request.get('/texts/x-tutorial-en');
+	const response = await page.request.get('/texts/2-tutorial');
 	await expect(response).toBeOK();
 });
 
@@ -13,7 +13,7 @@ test('cannot navigate to a non-existing title', async ({ page }) => {
 });
 
 test('if text not specified, rerouted to tutorial page', async ({ page }) => {
-	const tutorial_name = 'x-tutorial-en';
+	const tutorial_name = '2-tutorial';
 	await page.goto('/');
 	await expect(page).toHaveURL('/texts/' + tutorial_name);
 
