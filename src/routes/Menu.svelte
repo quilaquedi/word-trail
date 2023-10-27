@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { version } from '$app/environment';
 	import type { TextInfo } from '$lib/types';
 	export let textInfos: TextInfo[];
 
@@ -18,7 +19,7 @@
 	<div class="drawer-side">
 		<label id="close-menu" for="menu-drawer" aria-label="close menu" class="drawer-overlay" />
 		<div class="menu p-4 w-80 min-h-full bg-accent">
-			<header aria-label="app name">WordTrail</header>
+			<header aria-label="app name">WordTrail v{version}</header>
 			<li>
 				{#each languages as language}
 					<details open>
