@@ -41,8 +41,14 @@ If you would like to run playwright tests, install playwright dependencies: `sud
 
 ## Developing
 
-Start the server: `npm run dev``
+Start the local postgres server. (On WSL: `sudo service postgresql start`)
+
+Use node version 18. (With nvm, `nvm use 18`).
+
+Start the server: `npm run dev`
 
 Run tests: `npm run test`
 
 To add and remove texts from the database, see `scripts/README.md`
+
+Note: if you run `vercel env pull` again after installation, you will need to remove all empty `LOCAL_` variables from the `.env.local` file for the local development version to work.
