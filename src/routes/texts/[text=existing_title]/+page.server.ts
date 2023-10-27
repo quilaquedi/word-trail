@@ -87,13 +87,14 @@ async function loadContextsFromDb(wordId: number, db) {
 		const fullText = await loadTextFromDb(textId, db);
 		const words = similarWords.filter((word) => word.textId == textId);
 		const newContexts = words.map((word) => {
+			const offset = word.StartLoc > LEADING_CHAR_COUNT ? LEADING_CHAR_COUNT : 0;
 			return {
 				wordId: word.id,
 				text: fullText.substring(
 					word.StartLoc - LEADING_CHAR_COUNT,
 					word.StartLoc + TRAILING_CHAR_COUNT
 				),
-				wordLoc: [LEADING_CHAR_COUNT, LEADING_CHAR_COUNT + word.rawForm.length]
+				wordLoc: [offset, offset + word.rawForm.length]
 			};
 		});
 		contexts.push(...newContexts);
