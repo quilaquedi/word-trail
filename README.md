@@ -14,7 +14,15 @@ Deploy to Vercel, using Vercel docs and SvelteKit template. This will create a v
 
 Link this development folder to Vercel: `vercel  link`
 
-Create a Neon db, using Neon docs, and connect to vercel project, using [Neon-Vercel Integration](https://vercel.com/integrations/neon). If you check the optiono to create a development branch, make sure to set it as the primary branch in your Neon dashboard.
+Create a Neon db, using Neon docs, and connect to vercel project, using [Neon-Vercel Integration](https://vercel.com/integrations/neon). DO NOT CHECK option to create a development branch.
+
+Go to Project, then Settings > Environment variables, and set the following Neon variables to be available in all environments (Production, Preview and Development).
+
+- `DATABASE_URL`
+- `PGUSER`
+- `PGPASSWORD`
+- `PGDATABASE`
+- `PGHOST`
 
 Pull vercel environment variables and save in `.env.local`: `vercel env pull`
 
