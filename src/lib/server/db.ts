@@ -6,7 +6,10 @@ import {
 	LOCAL_POSTGRES_PASSWORD,
 	LOCAL_POSTGRES_DATABASE,
 	LOCAL_POSTGRES_HOST,
-	POSTGRES_URL
+	PGUSER,
+	PGPASSWORD,
+	PGDATABASE,
+	PGHOST,
 } from '$env/static/private';
 const { Pool } = pg_pkg;
 
@@ -25,7 +28,17 @@ if (dev) {
 		'/' +
 		LOCAL_POSTGRES_DATABASE;
 } else {
-	connectionString = POSTGRES_URL + '?sslmode=require';
+	connectionString =
+	'postgres://' +
+	PGUSER +
+	':' +
+	PGPASSWORD +
+	'@' +
+	PGHOST +
+	':' +
+	5432 +
+	'/' +
+	PGDATABASE + '?sslmode=require';
 }
 
 const pool = new Pool({
