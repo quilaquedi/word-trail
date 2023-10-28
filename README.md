@@ -47,8 +47,26 @@ Use node version 18. (With nvm, `nvm use 18`).
 
 Start the server: `npm run dev`
 
+(Note: if you run `vercel env pull` again after installation, you will need to remove all empty `LOCAL_` variables from the `.env.local` file for the local development version to work.)
+
 Run tests: `npm run test`
 
 To add and remove texts from the database, see `scripts/README.md`
 
-Note: if you run `vercel env pull` again after installation, you will need to remove all empty `LOCAL_` variables from the `.env.local` file for the local development version to work.
+For other webapp-related commands, see `package.json`.
+
+## Project Structure
+
+This repository is mostly structured as a SvelteKit project. The web app, frontend and backend, uses the SvelteKit template.
+However data used in the app is generated offline by Python scripts, and loaded into a database.
+
+- `src`, `static`, and `tests` directories, as well as most configuration files, concern the webapp.
+
+- `scripts` and `data` directories are outside of the webapp (see the `.vercelignore` file) .
+
+In more detail:
+
+- `src` contains JavaScript code for both the backend and frontend code. Code which runs on the server only (the backend) is in the `lib/server` directory, or has suffix `.server.ts`. See [SvelteKit docs](https://kit.svelte.dev/docs/project-structure) for more info on directory structure.
+- `static` is mostly unused and serves static assets for the web app.
+- `tests` contains browser-based tests using the [Playwright](https://playwright.dev/docs/writing-tests) library.
+- `scripts` contains Python scripts for loading data into databases, to be used by the web app. See [scripts/README.md](scripts/README.md) for more information.
