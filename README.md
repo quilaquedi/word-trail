@@ -55,7 +55,15 @@ To add and remove texts from the database, see `scripts/README.md`
 
 For other webapp-related commands, see `package.json`.
 
-## Project Structure
+### Standards
+
+The color scheme has been chosen to be accessible for people who have difficulty perceiving color. This has been achieved by following the WCAG 2.1 color scheme guidelines. When selecting colors, keep the following principle in mind: **you should be able to discern the difference between elements either by contrast or some other non-color-related styling (e.g. bold or italics)**.
+
+Use [this tool](https://webaim.org/resources/contrastchecker/) to check contrast of one color against another.
+
+You can also read more about the WCAG color guidelines [here](https://www.w3.org/WAI/WCAG21/Understanding/use-of-color.html).
+
+### Project Structure
 
 This repository is mostly structured as a SvelteKit project. The web app, frontend and backend, uses the SvelteKit template.
 However data used in the app is generated offline by Python scripts, and loaded into a database.

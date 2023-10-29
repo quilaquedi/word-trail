@@ -53,7 +53,7 @@
 						{:else if data.contexts[similarityType.id].length === 0}
 							<td
 								><div class="cell">
-									<p class="text-base-300 text-center italic align-middle">No matches found.</p>
+									<p class="text-primary text-center italic align-middle">No matches found.</p>
 								</div></td
 							>
 						{:else}
