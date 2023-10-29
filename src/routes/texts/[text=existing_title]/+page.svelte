@@ -14,6 +14,14 @@
 	let similarityTypes: SimilarityType[] = [
 		{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }
 	];
+	let isOpen = { same: false };
+
+	function openOnContextLoad() {
+		data.contexts = undefined;
+		setTimeout(() => {
+			isOpen.same = true;
+		}, 150);
+	}
 </script>
 
 <svelte:head>
@@ -30,7 +38,7 @@
 					<br />
 					<br />
 				{/if}
-				<Word id={word.id} rawForm={word.rawForm} />
+				<Word id={word.id} rawForm={word.rawForm} on:click={openOnContextLoad} />
 			{/each}
 		</form>
 	</div>
@@ -42,32 +50,45 @@
 
 	<div class="grid gap-8">
 		{#each similarityTypes as similarityType}
-			<div aria-label={similarityType.name + ' Pane'} class="rounded bg-neutral overflow-y-auto">
-				<table class="table table-pin-rows w-full">
-					<thead class="text-accent uppercase">
-						<tr><th class="px-2 py-1 font-semibold">{similarityType.heading}</th></tr>
-					</thead>
-					<tbody class="text-primary text-xs">
-						{#if data.contexts === undefined}
-							<p />
-						{:else if data.contexts[similarityType.id].length === 0}
-							<td
-								><div class="cell">
-									<p class="text-primary text-center italic align-middle">No matches found.</p>
-								</div></td
-							>
+			<details
+				aria-label={similarityType.name + ' Pane'}
+				class="text-xs rounded"
+				bind:open={isOpen[similarityType.id]}
+			>
+				<summary class="min-h-0 p-2 font-semibold uppercase text-accent list-none">
+					<div class="flex justify-between">
+						<div class="">{similarityType.heading}</div>
+						{#if isOpen[similarityType.id]}
+							<div class="text-right">-</div>
 						{:else}
-							{#each data.contexts[similarityType.id] as context}
-								<tr class="hover"
-									><td class="p-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-0">
-										<RelatedContext {...context} />
-									</td></tr
-								>
-							{/each}
+							<div class="text-right">+</div>
 						{/if}
-					</tbody>
-				</table>
-			</div>
+					</div>
+				</summary>
+				<div class="bg-neutral px-0 h-24 overflow-y-auto">
+					<table class="table table-pin-rows w-full">
+						<tbody class="text-primary text-xs">
+							{#if data.contexts === undefined}
+								<p />
+							{:else if data.contexts[similarityType.id].length === 0}
+								<td
+									><div class="cell">
+										<p class="text-primary text-center italic align-middle">No results found.</p>
+									</div></td
+								>
+							{:else}
+								{#each data.contexts[similarityType.id] as context}
+									<tr class="hover"
+										><td class="p-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-0">
+											<RelatedContext {...context} />
+										</td></tr
+									>
+								{/each}
+							{/if}
+						</tbody>
+					</table>
+				</div>
+			</details>
 		{/each}
 	</div>
 </div>

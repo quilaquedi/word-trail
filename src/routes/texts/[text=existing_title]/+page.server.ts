@@ -171,7 +171,7 @@ async function loadContexts(wordId: string | null, db) {
 	return contexts;
 }
 
-export const load = (({ url, params, locals }) => {
+export const load: PageServerLoad = async ({ url, params, locals }) => {
 	const db = locals.db;
 	// Load text
 	const textId = params.text.split('-')[0];
@@ -182,8 +182,8 @@ export const load = (({ url, params, locals }) => {
 	const wordId = url.searchParams.get('word');
 	const contexts = loadContexts(wordId, db);
 	return {
-		contexts: contexts,
-		textTitle: textTitle,
-		text: text
+		contexts: await contexts,
+		textTitle: await textTitle,
+		text: await text
 	};
-}) satisfies PageServerLoad;
+};
