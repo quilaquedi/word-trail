@@ -18,12 +18,14 @@
 	</div>
 	<div class="drawer-side">
 		<label id="close-menu" for="menu-drawer" aria-label="close menu" class="drawer-overlay" />
-		<div class="menu p-4 w-80 min-h-full bg-accent">
-			<header aria-label="app name">WordTrail v{version}</header>
-			<li>
+		<div class="menu p-4 w-80 min-h-full bg-accent text-base-100">
+			<header aria-label="app name" class="text-xl py-3">
+				WordTrail <span class="text-xs">v{version}</span>
+			</header>
+			<li class="pl-2">
 				{#each languages as language}
-					<details open>
-						<summary>{language}</summary>
+					<details open class="text-base">
+						<summary class="underline">{language}</summary>
 						<ul>
 							{#each textInfos.filter((ti) => ti.language == language) as textInfo}
 								<li>
