@@ -14,13 +14,15 @@
 	let similarityTypes: SimilarityType[] = [
 		{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }
 	];
-	let isOpen = { same: false };
+	let isOpen = { same: true };
 
 	function openOnContextLoad() {
-		data.contexts = undefined;
-		setTimeout(() => {
+		if ( !isOpen.same ) {
+			// hide previous contexts before opening
+			data.contexts = undefined;
+
 			isOpen.same = true;
-		}, 150);
+		}
 	}
 </script>
 
