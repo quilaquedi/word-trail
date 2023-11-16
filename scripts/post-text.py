@@ -9,7 +9,7 @@ from loguru import logger
 from tqdm import tqdm
 
 LANGUAGE_CODES_PATH = (
-    Path(__file__).absolute().parent.parent / "src/lib/server" / "languages.json"
+    Path(__file__).absolute().parent.parent / "src/lib/server/data/languages.json"
 )
 INSERT_BATCH_SIZE = 75_000
 

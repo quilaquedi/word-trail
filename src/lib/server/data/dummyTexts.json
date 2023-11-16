@@ -1,0 +1,18 @@
+{
+    "x": [
+    { "id": "A", "rawForm": "This", "textPos": 0 },
+    { "id": "B", "rawForm": "is", "textPos": 1 },
+    { "id": "C", "rawForm": "a", "textPos": 2 },
+    { "id": "D", "rawForm": "text.", "textPos": 3 },
+    { "id": "D1", "rawForm": "That", "textPos": 4 },
+    { "id": "D2", "rawForm": "sea", "textPos": 5 },
+    { "id": "D3", "rawForm": "is", "textPos": 6 },
+    { "id": "D4", "rawForm": "blue.", "textPos": 7 },
+    { "id": "E", "rawForm": "Click", "textPos": 8 },
+    { "id": "F", "rawForm": "on", "textPos": 9 },
+    { "id": "G", "rawForm": "the", "textPos": 10 },
+    { "id": "H", "rawForm": "second", "textPos": 11 },
+    { "id": "I", "rawForm": "word.", "textPos": 12 }
+]
+}
+

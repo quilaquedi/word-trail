@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import type { Contexts } from '$lib/types';
-	import RelatedContext from './RelatedContext.svelte';
-	import Word from './Word.svelte';
+	import SubmitButton from '$lib/SubmitButton.svelte';
+	import SearchResults from '$lib/SearchResults.svelte';
+	import CollapsiblePane from '$lib/CollapsiblePane.svelte';
 
 	export let data: PageData;
 
@@ -14,10 +15,10 @@
 	let similarityTypes: SimilarityType[] = [
 		{ id: 'same', name: 'Same Word', heading: 'In other contexts...' }
 	];
-	let isOpen = { same: true };
+	let isOpen = { same: true, spelling: false, meaning: false };
 
 	function openOnContextLoad() {
-		if ( !isOpen.same ) {
+		if (!isOpen.same) {
 			// hide previous contexts before opening
 			data.contexts = undefined;
 
@@ -40,7 +41,13 @@
 					<br />
 					<br />
 				{/if}
-				<Word id={word.id} rawForm={word.rawForm} on:click={openOnContextLoad} />
+				<SubmitButton
+					label={word.rawForm}
+					name="word"
+					value={String(word.id)}
+					attrs={{ class: 'mx-0.5' }}
+					on:click={openOnContextLoad}
+				/>
 			{/each}
 		</form>
 	</div>
@@ -52,45 +59,25 @@
 
 	<div class="grid gap-8">
 		{#each similarityTypes as similarityType}
-			<details
-				aria-label={similarityType.name + ' Pane'}
-				class="text-xs rounded"
-				bind:open={isOpen[similarityType.id]}
+			<CollapsiblePane
+				attrs={{ 'aria-label': similarityType.name + ' Pane', class: 'text-xs rounded' }}
+				openCondition={isOpen[similarityType.id]}
+				heading={similarityType.heading}
+				headingAttrs={{ class: 'min-h-0 p-2 font-semibold uppercase text-accent list-none' }}
+				bodyAttrs={{ class: 'bg-neutral px-0 h-24' }}
 			>
-				<summary class="min-h-0 p-2 font-semibold uppercase text-accent list-none">
-					<div class="flex justify-between">
-						<div class="">{similarityType.heading}</div>
-						{#if isOpen[similarityType.id]}
-							<div class="text-right">-</div>
-						{:else}
-							<div class="text-right">+</div>
-						{/if}
-					</div>
-				</summary>
-				<div class="bg-neutral px-0 h-24 overflow-y-auto">
-					<table class="table table-pin-rows w-full">
-						<tbody class="text-primary text-xs">
-							{#if data.contexts === undefined}
-								<p />
-							{:else if data.contexts[similarityType.id].length === 0}
-								<td
-									><div class="cell">
-										<p class="text-primary text-center italic align-middle">No results found.</p>
-									</div></td
-								>
-							{:else}
-								{#each data.contexts[similarityType.id] as context}
-									<tr class="hover"
-										><td class="p-2 whitespace-nowrap overflow-hidden text-ellipsis max-w-0">
-											<RelatedContext {...context} />
-										</td></tr
-									>
-								{/each}
-							{/if}
-						</tbody>
-					</table>
-				</div>
-			</details>
+				<SearchResults
+					results={data.contexts == undefined ? undefined : data.contexts[similarityType.id]}
+					attrs={{ class: 'text-primary text-xs' }}
+					resultAttrs={{ class: 'p-2' }}
+					matchAttrs={{ class: 'italic' }}
+				>
+					<p slot="before-search" />
+					<p slot="no-results" class="text-primary text-center italic align-middle">
+						No results found.
+					</p>
+				</SearchResults>
+			</CollapsiblePane>
 		{/each}
 	</div>
 </div>

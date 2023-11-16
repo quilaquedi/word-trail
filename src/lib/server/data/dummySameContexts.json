@@ -1,0 +1,9 @@
+{
+    "B": [
+        {"context": "sea is blue. Click on the second word.", "matchStart": 4, "matchEnd": 6 }
+    ],
+    "D3": [{
+        "context": "This is a text. That sea is blue. Click on the second word.",
+        "matchStart": 5, "matchEnd": 7
+    }]
+}

@@ -5,9 +5,9 @@ export type Text = {
 }[];
 
 export type Context = {
-	wordId: string | number;
-	text: string;
-	wordLoc: number[];
+	context: string;
+	matchStart: number;
+	matchEnd: number;
 };
 
 export type Contexts = {

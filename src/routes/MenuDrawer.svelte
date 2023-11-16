@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { version } from '$app/environment';
+	import Menu from '$lib/Menu.svelte';
 	import type { TextInfo } from '$lib/types';
 	export let textInfos: TextInfo[];
 
-	const languages = ['English', 'Deutsch'];
+	const entries = textInfos.map((textInfo) => {
+		return { label: textInfo.title, target: '/texts/' + textInfo.slug, section: textInfo.language };
+	});
 </script>
 
 <div class="drawer">
@@ -18,27 +21,15 @@
 	</div>
 	<div class="drawer-side">
 		<label id="close-menu" for="menu-drawer" aria-label="close menu" class="drawer-overlay" />
-		<div class="menu p-4 w-80 min-h-full bg-accent text-base-100">
+		<Menu
+			{entries}
+			attrs={{ class: 'menu p-4 w-80 min-h-full bg-accent text-base-100' }}
+			sectionAttrs={{ class: 'underline pl-2' }}
+			itemAttrs={{ class: 'pl-2' }}
+		>
 			<header aria-label="app name" class="text-xl py-3">
 				WordTrail <span class="text-xs">v{version}</span>
 			</header>
-			<li class="pl-2">
-				{#each languages as language}
-					<details open class="text-base">
-						<summary class="underline">{language}</summary>
-						<ul>
-							{#each textInfos.filter((ti) => ti.language == language) as textInfo}
-								<li>
-									<a
-										on:click={() => document.getElementById('close-menu').click()}
-										href={'/texts/' + textInfo.slug}>{textInfo.title}</a
-									>
-								</li>
-							{/each}
-						</ul>
-					</details>
-				{/each}
-			</li>
-		</div>
+		</Menu>
 	</div>
 </div>

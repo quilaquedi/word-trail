@@ -1,16 +1,12 @@
 import { text_ } from '$lib/server/db_schema';
-import languages from '$lib/server/languages.json';
+import languages from '$lib/server/data/languages.json';
 
 import type { PageServerLoad } from './$types';
 import type { TextInfo } from '$lib/types';
 
 async function loadTextListFromDb(db) {
 	const result = await db
-		.select({
-			id: text_.id,
-			title: text_.title,
-			langCode: text_.language
-		})
+		.select({ id: text_.id, title: text_.title, langCode: text_.language })
 		.from(text_)
 		.where();
 	return result;
@@ -35,7 +31,5 @@ async function loadTextInfos(db) {
 
 export const load = (({ locals }) => {
 	// Load list of available texts, for menu
-	return {
-		textInfos: loadTextInfos(locals.db)
-	};
+	return { textInfos: loadTextInfos(locals.db) };
 }) satisfies PageServerLoad;
